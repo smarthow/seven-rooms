@@ -85,7 +85,8 @@ running for real.
   visitor is and *what the current slide is waiting for*. `next_slide` refuses to force a locked
   slide and explains the block instead. `go_to_room` lands on a door, never mid-room. An agent can
   read the site out loud to someone who cannot use a mouse, and the page cooperates by design.
-- **Every claim is auditable.** No backend, no analytics, no network calls after the fonts. State
+- **Every claim is auditable.** No backend, no analytics, no third-party requests after the Google
+  Fonts stylesheet — the illustrations are same-origin static files. State
   lives in `localStorage` under `sevenrooms:` and **Start over** erases it. A reader who does not
   believe us can read `dist/`.
 
@@ -226,7 +227,7 @@ Practical notes for the shoot:
 | **Works without an agent** | Labelled ghost simulation (`src/webmcp/ghost.ts`) calling the same `execute` functions. Never presented as a real agent. | Done |
 | **Spec conformance** | Section (d) → *Conformance*, and `README.md` → *Spec conformance notes*. Research with sources: `docs/webmcp-api.md`. | Done |
 | **Reproducible build** | `npm install && npm run build` (runs `tsc --noEmit` first). Node 18+. No backend, no keys, no env vars. | Done |
-| **Privacy** | No backend, no analytics, no network calls after the Google Fonts stylesheet. All state in `localStorage` under `sevenrooms:`; **Start over** erases it. | Done |
+| **Privacy** | No backend, no analytics, no tracking, and no third-party requests after the Google Fonts stylesheet — the illustrations are same-origin static files served by the same Worker. All state in `localStorage` under `sevenrooms:`; **Start over** erases it. | Done |
 | **Contribution path** | `CONTRIBUTING.md`, `docs/ROOM_GUIDE.md`, `docs/ARCHITECTURE.md`. | Done |
 
 ### How to verify the WebMCP part in two minutes
