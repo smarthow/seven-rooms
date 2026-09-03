@@ -19,9 +19,10 @@ import { agent as agentChar } from '../../engine/characters';
 import { doorSlide, predictionSlide } from '../../engine/roomSlides';
 import type { Room, Slide, SlideContext } from '../../engine/types';
 import {
+  withClass,
+  illo,
   bubble,
   buttonRow,
-  card,
   compactToolCards,
   fitBody,
   fitHeader,
@@ -41,13 +42,12 @@ import type { PageTool } from '../../webmcp/bridge';
 import type { GhostStep } from '../../webmcp/ghost';
 
 import {
+  HAPPENED_POINT,
   ARTICLE_PARAGRAPHS,
   ARTICLE_SUMMARY,
   ARTICLE_TITLE,
   BAD_FUTURE,
   BRIGHT_FUTURE,
-  HAPPENED_ASIDE,
-  HAPPENED_BODY,
   HAPPENED_TITLE,
   DOOR_LINE,
   OPTIONS_INTRO,
@@ -120,6 +120,8 @@ const optionsSlide: Slide = {
 
     const readArticle: PageTool = {
       name: 'read_article',
+      summary:
+        'Returns the whole article, so nothing has to be scrolled.',
       description:
         'Return the full text of the article on this page, so you can read it without scrolling. No arguments.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
@@ -143,6 +145,8 @@ const optionsSlide: Slide = {
 
     const getSummary: PageTool = {
       name: 'get_summary',
+      summary:
+        'One sentence instead of the whole article.',
       description:
         'Return a short, one-sentence summary of the article on this page. No arguments.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
@@ -231,12 +235,10 @@ const happenedSlide: Slide = {
         title: HAPPENED_TITLE,
       }),
       fitBody(
-        para(HAPPENED_BODY),
-        card(
-          'The trade this site makes',
-          'Your seconds for the writer’s work. It is not a scam. It has paid for most of the news you have ever read for free.',
-        ),
-        para(HAPPENED_ASIDE),
+        // The drawing is the explanation on this slide, so it gets the same
+        // generous scale as the type slides rather than the deck's `lg`.
+        withClass(illo('room-1-happened', { size: 'lg' }), 'illo--type'),
+        para(HAPPENED_POINT),
         bubble(
           calls.length > 0
             ? `Your agent made ${calls.length} call${calls.length === 1 ? '' : 's'} in this room. The page earned nothing from any of them.`

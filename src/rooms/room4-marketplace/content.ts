@@ -129,17 +129,13 @@ export const WALK_LINE =
 
 /* ----------------------------------------------------- what just happened */
 
+/** The single line this slide keeps. The drawing above it carries the
+ * argument; three paragraphs of prose under a picture do not get read. */
+export const HAPPENED_POINT =
+  'Your agent knew three prices. Theirs knew every deal it had ever made.';
+
+
 export const HAPPENED_TITLE = 'Fixed prices were built for a tired human.';
-
-export const HAPPENED_BODY =
-  'A price tag is a guess about you: how much you will compare, how long you will keep looking, how late it is. Marketplaces made money on that guess. Your agent never gets tired, so the guess stops working.';
-
-export const HAPPENED_ASIDE =
-  'So the price becomes a negotiation. That sounds fair until you count the two sides. The site’s agent was built for this one page, it runs all day, and it has every past deal to learn from.';
-
-export const HAPPENED_CARD_TITLE = 'The trade this site makes';
-export const HAPPENED_CARD_BODY =
-  'It stands between a buyer and a seller and takes a cut for making the match. That cut only survives while the match is hard to make yourself.';
 
 /* ---------------------------------------------------------- two futures */
 

@@ -17,7 +17,8 @@
  * and `offer()`, so the ghost agent and a real agent end in the same place.
  */
 
-import { button, buttonRow, h, meter, raw, stat, statRow, tiny } from '../../engine/ui';
+import { button, buttonRow, h, meter, stat, statRow, tiny } from '../../engine/ui';
+import { seller } from '../../engine/characters';
 import type { MeterHandle } from '../../engine/ui';
 import {
   BASE_CONCESSION,
@@ -123,19 +124,10 @@ interface OfferState extends OfferView {
 const money = (v: number) => `$${v.toFixed(2).replace(/\.00$/, '')}`;
 const pct = (v: number) => `${v.toFixed(1)}%`;
 
-/** The seller's agent: same shape as your agent, darker, not on your side. */
+/** The seller's agent: same cast as your own agent, but shrewd — a drawing
+ * rather than the inline SVG it used to be, so it matches the rest of the art. */
 function sellerBadge(): HTMLElement {
-  return raw(
-    `<svg class="seller__art" viewBox="0 0 64 64" role="img" aria-label="the seller's agent">
-      <rect x="12" y="14" width="40" height="36" rx="11" fill="none" stroke="currentColor" stroke-width="3.4"/>
-      <rect x="20" y="26" width="24" height="9" rx="4.5" fill="currentColor"/>
-      <line x1="32" y1="14" x2="32" y2="7" stroke="currentColor" stroke-width="3.4"/>
-      <circle cx="32" cy="6" r="3.2" fill="currentColor"/>
-      <line x1="22" y1="50" x2="22" y2="56" stroke="currentColor" stroke-width="3.4"/>
-      <line x1="42" y1="50" x2="42" y2="56" stroke="currentColor" stroke-width="3.4"/>
-    </svg>`,
-    'seller__badge',
-  );
+  return h('div', { class: 'seller__badge' }, seller());
 }
 
 export function createMarketSandbox(): MarketSandbox {

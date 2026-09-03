@@ -68,7 +68,13 @@ const lockoutSlide: Slide = {
         eyebrow: 'the ending',
         title: 'You used your agent to prove that agents break most of the web.',
       }),
-      fitBody(
+      // `fitScroll`, not `fitBody`: this slide GROWS after it renders. `wall`
+      // starts empty and the timers below append "The walls close.", a lead
+      // and a card into it over the next two seconds. A fixed body fits on the
+      // first frame and then silently clips what arrives — and because the
+      // stage is `overflow: hidden` above 768px, the visitor cannot scroll to
+      // it either. They just lose the end of the sentence.
+      fitScroll(
         para(
           'Five of the seven rooms earn money from something your agent does not have: patience, boredom, embarrassment, forgetfulness, a lack of time. Two of them get better.',
         ),

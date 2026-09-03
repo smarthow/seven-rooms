@@ -56,13 +56,13 @@ export const REACTION_DETAIL =
 
 /* ----------------------------------------------------- what just happened */
 
+/** The single line this slide keeps. The drawing above it carries the
+ * argument; three paragraphs of prose under a picture do not get read. */
+export const HAPPENED_POINT =
+  'Nothing about the article changed. Only who read it.';
+
+
 export const HAPPENED_TITLE = 'The page paid for itself with your time. Your agent brought none.';
-
-export const HAPPENED_BODY =
-  'A news site does not sell articles. It sells the seconds you spend near its ads. That is the whole business: attention in, money out. Your agent read the same words and produced zero seconds of attention. Not by cheating — by being fast.';
-
-export const HAPPENED_ASIDE =
-  'Multiply that by every reader who starts using an agent, and the number that pays the writer goes to zero. Nothing about the article changed. Only who read it.';
 
 /* ---------------------------------------------------------- two futures */
 

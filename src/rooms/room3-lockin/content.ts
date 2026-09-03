@@ -124,18 +124,13 @@ export const LIST_LINE =
 
 /* ----------------------------------------------------- what just happened */
 
+/** The single line this slide keeps. The drawing above it carries the
+ * argument; three paragraphs of prose under a picture do not get read. */
+export const HAPPENED_POINT =
+  'Lock-in was never a lock. It was fourteen hours of dull work you did not have.';
+
+
 export const HAPPENED_TITLE = 'The switching cost was the business model. It just went to zero.';
-
-export const HAPPENED_BODY =
-  'A dashboard like this does not keep you because it is the best. It keeps you because moving is fourteen hours of dull work, and you have better evenings planned. That effort was the fence — and it only ever worked on humans.';
-
-export const HAPPENED_CARD_TITLE = 'What lock-in actually is';
-
-export const HAPPENED_CARD_BODY =
-  'Not a lock. A pile of small, boring tasks between you and the door. Copy this. Re-type that. Download six files, one at a time.';
-
-export const HAPPENED_ASIDE =
-  'An agent clears that pile in a second, without complaining. So the product has to keep you some other way: by being good.';
 
 /* ---------------------------------------------------------- two futures */
 

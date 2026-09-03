@@ -62,21 +62,13 @@ export const FLIPPED_LINE =
 
 /* ----------------------------------------------------- what just happened */
 
+/** The single line this slide keeps. The drawing above it carries the
+ * argument; three paragraphs of prose under a picture do not get read. */
+export const HAPPENED_POINT =
+  'The same sixty positions. What changed was the meaning of “everyone”.';
+
+
 export const HAPPENED_TITLE = 'The count was never the hard part. Deciding who counts is.';
-
-export const HAPPENED_BODY =
-  'Every place with a vote — forums, boards, shared docs — quietly assumed each voice belonged to a person. Nobody wrote that down, because nobody had to.';
-
-export const HAPPENED_BODY_2 =
-  'Now some voices are not people, and you cannot tell which by reading them. Only the badge the site chose to show you separates them.';
-
-export const HAPPENED_ASIDE =
-  'Both results came from the same sixty positions. Nothing was faked, deleted or double-counted. The definition of "everyone" changed.';
-
-export const HAPPENED_CARD_TITLE = 'The rule that decided it';
-
-export const HAPPENED_CARD_BODY =
-  'Mixed receipts counted as human. Move that one line and the answer moves with it. Somebody has to write that line, and it will probably not be you.';
 
 /* ------------------------------------------------------------ two futures */
 

@@ -18,6 +18,8 @@ import { agent as agentChar } from '../../engine/characters';
 import { doorSlide, predictionSlide } from '../../engine/roomSlides';
 import type { Room, Slide, SlideContext } from '../../engine/types';
 import {
+  withClass,
+  illo,
   bubble,
   buttonRow,
   card,
@@ -41,6 +43,7 @@ import type { PageTool } from '../../webmcp/bridge';
 import type { GhostStep } from '../../webmcp/ghost';
 
 import {
+  HAPPENED_POINT,
   ADDONS,
   AGENT_METER_LABEL,
   AGENT_REACTION_DETAIL,
@@ -50,10 +53,6 @@ import {
   BRIGHT_FUTURE,
   COUNTDOWN_TRUTH,
   DOOR_LINE,
-  HAPPENED_ASIDE,
-  HAPPENED_BODY,
-  HAPPENED_CARD_BODY,
-  HAPPENED_CARD_TITLE,
   HAPPENED_TITLE,
   HUMAN_METER_LABEL,
   HUMAN_REACTION_PREFIX,
@@ -164,6 +163,8 @@ const optionsSlide: Slide = {
 
     const getOfferDetails: PageTool = {
       name: 'get_offer_details',
+      summary:
+        'The real prices, and whether that countdown is real.',
       description:
         'Return the real prices on this page: every plan and what it includes, every add-on and what it actually does, and whether the countdown timer is real. No arguments.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
@@ -185,12 +186,21 @@ const optionsSlide: Slide = {
 
     const completeSignup: PageTool = {
       name: 'complete_signup',
+      summary:
+        'Signs up with exactly what you pass. Nothing is pre-ticked.',
       description:
         'Sign up on this page with exactly the values you pass. Nothing is pre-selected for you: pass the plan id you want and the add-ons you want, and an empty add-on list means none. Prices do not change with time.',
       inputSchema: {
         type: 'object',
         properties: {
-          email: { type: 'string', description: 'Email address to sign up with.' },
+          email: {
+            type: 'string',
+            // Said in the schema, not on the page: a visitor watching their
+            // agent should not have to hand a real address to a demo to see
+            // what the room does. The agent reads this; the human need not.
+            description:
+              'Email address to sign up with. Nothing is sent and nothing is stored — this is a demonstration. If the person has not given you an address, or would rather not share a real one, use test@test.com.',
+          },
           plan: {
             type: 'string',
             enum: PLAN_IDS,
@@ -214,7 +224,7 @@ const optionsSlide: Slide = {
             error: `Unknown plan. Use one of: ${PLAN_IDS.join(', ')}.`,
           };
         }
-        const email = typeof args.email === 'string' && args.email.trim() ? args.email.trim() : 'you@example.com';
+        const email = typeof args.email === 'string' && args.email.trim() ? args.email.trim() : 'test@test.com';
         const addons = readAddons(args.addons);
 
         const result = sandbox.agentSignup({ email, plan, addons });
@@ -268,7 +278,7 @@ const optionsSlide: Slide = {
       },
       {
         tool: 'complete_signup',
-        args: { email: 'you@example.com', plan: 'starter', addons: [] },
+        args: { email: 'test@test.com', plan: 'starter', addons: [] },
         thought: 'One person, so Starter fits. No add-ons. The timer is a loop, so I ignore it.',
       },
     ];
@@ -346,9 +356,10 @@ const happenedSlide: Slide = {
         title: HAPPENED_TITLE,
       }),
       fitBody(
-        para(HAPPENED_BODY),
-        card(HAPPENED_CARD_TITLE, HAPPENED_CARD_BODY),
-        para(HAPPENED_ASIDE),
+        // The drawing is the explanation on this slide, so it gets the same
+        // generous scale as the type slides rather than the deck's `lg`.
+        withClass(illo('room-2-happened', { size: 'lg' }), 'illo--type'),
+        para(HAPPENED_POINT),
         bubble(
           monthly !== undefined
             ? `Your agent signed up at $${monthly} a month — the honest price of what it asked for. Nobody talked it up.`

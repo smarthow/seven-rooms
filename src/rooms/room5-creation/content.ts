@@ -71,18 +71,13 @@ export const AFTER_RUN_LINE =
 
 /* ----------------------------------------------------- what just happened */
 
+/** The single line this slide keeps. The drawing above it carries the
+ * argument; three paragraphs of prose under a picture do not get read. */
+export const HAPPENED_POINT =
+  'Nobody took turns. Not faster — new.';
+
+
 export const HAPPENED_TITLE = 'You just touched the same thing at the same moment.';
-
-export const HAPPENED_BODY =
-  'Until now a machine using a web page did one of two things. It took your mouse away and you sat watching. Or it worked far from your eyes — a job on a server that finished at 3am and mailed you a file. Either way, you took turns.';
-
-export const HAPPENED_BODY_2 =
-  'On this canvas you did not take turns. Your click and its tool call landed in the same document, in the same second. That is new. Not faster — new.';
-
-export const HAPPENED_CARD_TITLE = 'Why the editors will say yes first';
-
-export const HAPPENED_CARD_BODY =
-  'A news site loses money when an agent reads for you. An editor does not: it earns when the document gets better, and two hands make it better faster.';
 
 /* ---------------------------------------------------------- two futures */
 

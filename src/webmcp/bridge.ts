@@ -45,8 +45,25 @@ export interface PageTool {
   name: string;
   /** Short human-readable label for tool pickers (ChatGPT's "Site tools"). Derived from the name if omitted. */
   title?: string;
-  /** Plain, honest. This text is read by the agent — no marketing, no tricks. */
+  /** Plain, honest. This text is read by the AGENT — no marketing, no tricks.
+   * Write it for a caller that has never seen the page: say what the tool
+   * does, what it returns, and any range or unit it needs. Length is fine
+   * here; the agent is not skim-reading. */
   description: string;
+  /**
+   * The one line shown to the PERSON in the on-page tool list.
+   *
+   * The two readers want different things. An agent needs "x is 0-7, left to
+   * right"; a visitor glancing at a side panel needs "paints one tile". With
+   * only one field the panel was either truncating the agent's description
+   * mid-sentence, or running to five lines of small type per tool. So the
+   * page shows this and the agent still gets `description` in full — the
+   * agent console and the DOM manifest both publish the real one, so nothing
+   * is hidden from the visitor either, it is one click away.
+   *
+   * Keep under ~90 characters. Falls back to `description` when absent.
+   */
+  summary?: string;
   /** JSON Schema object, e.g. { type:'object', properties:{…}, required:[…] }. */
   inputSchema: Record<string, unknown>;
   /**

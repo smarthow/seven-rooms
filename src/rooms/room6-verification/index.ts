@@ -21,9 +21,10 @@ import { agent as agentChar } from '../../engine/characters';
 import { doorSlide, predictionSlide } from '../../engine/roomSlides';
 import type { Room, Slide, SlideContext } from '../../engine/types';
 import {
+  withClass,
+  illo,
   bubble,
   buttonRow,
-  card,
   compactToolCards,
   fitBody,
   fitHeader,
@@ -43,6 +44,7 @@ import type { PageTool } from '../../webmcp/bridge';
 import type { GhostStep } from '../../webmcp/ghost';
 
 import {
+  HAPPENED_POINT,
   ACCEPTED_LINE,
   BAD_FUTURE,
   BIG_QUESTION,
@@ -50,10 +52,6 @@ import {
   CLAUSES,
   DECLINED_LINE,
   DOOR_LINE,
-  HAPPENED_ASIDE,
-  HAPPENED_BODY,
-  HAPPENED_CARD_BODY,
-  HAPPENED_CARD_TITLE,
   HAPPENED_TITLE,
   HUMAN_AGREED_NOTE,
   HUMAN_SKIPPED_NOTE,
@@ -188,6 +186,8 @@ const optionsSlide: Slide = {
 
     const readTerms: PageTool = {
       name: 'read_terms',
+      summary:
+        'Returns the full terms, every clause.',
       description:
         'Return the full text of the Terms of Service shown on this page — all six clauses, exactly as written. No arguments.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
@@ -210,6 +210,8 @@ const optionsSlide: Slide = {
 
     const acceptTerms: PageTool = {
       name: 'accept_terms',
+      summary:
+        'Accepts on your behalf — if that even means anything.',
       description:
         'Agree to these Terms of Service for the person using this browser. The acceptance is recorded on the page and signed with the name you give. Read the terms first.',
       inputSchema: {
@@ -245,6 +247,8 @@ const optionsSlide: Slide = {
 
     const declineTerms: PageTool = {
       name: 'decline_terms',
+      summary:
+        'Refuses on your behalf, and says so plainly.',
       description:
         'Refuse these Terms of Service for the person using this browser, and record the reason in plain words on the page.',
       inputSchema: {
@@ -367,9 +371,10 @@ const happenedSlide: Slide = {
         title: HAPPENED_TITLE,
       }),
       fitBody(
-        para(HAPPENED_BODY),
-        card(HAPPENED_CARD_TITLE, HAPPENED_CARD_BODY),
-        para(HAPPENED_ASIDE),
+        // The drawing is the explanation on this slide, so it gets the same
+        // generous scale as the type slides rather than the deck's `lg`.
+        withClass(illo('room-6-happened', { size: 'lg' }), 'illo--type'),
+        para(HAPPENED_POINT),
         bubble(closing, 'narrator'),
       ),
     );

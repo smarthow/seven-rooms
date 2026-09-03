@@ -19,9 +19,10 @@ import { agent as agentChar } from '../../engine/characters';
 import { doorSlide, predictionSlide } from '../../engine/roomSlides';
 import type { Room, Slide, SlideContext } from '../../engine/types';
 import {
+  withClass,
+  illo,
   bubble,
   buttonRow,
-  card,
   compactToolCards,
   fitBody,
   fitHeader,
@@ -41,6 +42,7 @@ import type { PageTool } from '../../webmcp/bridge';
 import type { GhostStep } from '../../webmcp/ghost';
 
 import {
+  HAPPENED_POINT,
   AFTER_RUN_LINE,
   BAD_FUTURE,
   BRIGHT_FUTURE,
@@ -49,10 +51,6 @@ import {
   FIRST_CALL_LINE,
   FUTURES_CODA,
   GHOST_NOTE,
-  HAPPENED_BODY,
-  HAPPENED_BODY_2,
-  HAPPENED_CARD_BODY,
-  HAPPENED_CARD_TITLE,
   HAPPENED_TITLE,
   KEEP_CLICKING,
   OPTIONS_INTRO,
@@ -165,6 +163,8 @@ const optionsSlide: Slide = {
 
     const setTile: PageTool = {
       name: 'set_tile',
+      summary:
+        'Paints one tile, at the same time as you.',
       description:
         'Paint one tile on the shared canvas. x is 0-7, left to right. y is 0-6, top to bottom. ' +
         'color must be one of: paper, coral, orange, teal, ink (paper means empty). ' +
@@ -216,6 +216,8 @@ const optionsSlide: Slide = {
 
     const paintTiles: PageTool = {
       name: 'paint_tiles',
+      summary:
+        'Paints up to 24 tiles in one call.',
       description:
         'Paint up to 24 tiles in one call. Pass an array of {x, y, color}: x is 0-7, y is 0-6, ' +
         'color is one of paper, coral, orange, teal, ink. Every tile changes the moment you call this — no approval step — ' +
@@ -281,6 +283,8 @@ const optionsSlide: Slide = {
 
     const getCanvas: PageTool = {
       name: 'get_canvas',
+      summary:
+        'Reads the canvas: who painted what, and where you collided.',
       description:
         'Return the whole shared canvas as a small text grid, plus which tiles were painted by the human, by you, or by both of you, and how many collisions have happened. No arguments.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
@@ -307,6 +311,8 @@ const optionsSlide: Slide = {
 
     const clearTile: PageTool = {
       name: 'clear_tile',
+      summary:
+        'Empties one tile, also without asking.',
       description:
         'Set one tile back to paper, which means empty. x is 0-7, y is 0-6. This also takes effect immediately, with no approval step, even if the human painted that tile a second ago.',
       inputSchema: {
@@ -482,9 +488,10 @@ const happenedSlide: Slide = {
         title: HAPPENED_TITLE,
       }),
       fitBody(
-        para(HAPPENED_BODY),
-        para(HAPPENED_BODY_2),
-        card(HAPPENED_CARD_TITLE, HAPPENED_CARD_BODY),
+        // The drawing is the explanation on this slide, so it gets the same
+        // generous scale as the type slides rather than the deck's `lg`.
+        withClass(illo('room-5-happened', { size: 'lg' }), 'illo--type'),
+        para(HAPPENED_POINT),
         bubble(
           paints.length > 0
             ? `Your agent changed ${paints.length} tile${paints.length === 1 ? '' : 's'} on a document you were holding, and ${

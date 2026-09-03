@@ -102,6 +102,8 @@ export function registerSiteTools(host: SiteToolsHost): () => void {
   const offs = [
     registerPageTool({
       name: 'handshake',
+      summary:
+        'Proves an agent is really here. The only honest signal this page has.',
       description:
         'Confirm to this page that an AI agent is connected and can call its tools. Call this first. Returns what the site is and how to proceed.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
@@ -122,6 +124,8 @@ export function registerSiteTools(host: SiteToolsHost): () => void {
 
     registerPageTool({
       name: 'describe_site',
+      summary:
+        'What this site is and how it is laid out.',
       description:
         'Describe this page: what Seven Rooms is, which chapter and slide the visitor is on, and what this slide is waiting for before it will let them continue.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
@@ -140,6 +144,8 @@ export function registerSiteTools(host: SiteToolsHost): () => void {
 
     registerPageTool({
       name: 'list_rooms',
+      summary:
+        'The seven rooms, and what each kind of site wants from you.',
       description:
         'List the seven rooms: number, the kind of website it is, what that site wants from a visitor, and whether this visitor has already cast their prediction vote there.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
@@ -157,6 +163,8 @@ export function registerSiteTools(host: SiteToolsHost): () => void {
 
     registerPageTool({
       name: 'go_to_room',
+      summary:
+        'Jump straight to a room by number.',
       description:
         'Move the visitor to the door of one of the seven rooms (its first slide). It never skips ahead inside a room.',
       inputSchema: {
@@ -182,6 +190,8 @@ export function registerSiteTools(host: SiteToolsHost): () => void {
 
     registerPageTool({
       name: 'next_slide',
+      summary:
+        'Advance one slide — only when the page has already unlocked Next.',
       description:
         'Advance to the next slide, but only if the page has already unlocked its Next button. If it is still locked, this explains what the slide is waiting for instead of forcing it.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },

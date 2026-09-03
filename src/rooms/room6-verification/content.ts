@@ -110,18 +110,13 @@ export const REVEAL_TAIL =
 
 /* ----------------------------------------------------- what just happened */
 
+/** The single line this slide keeps. The drawing above it carries the
+ * argument; three paragraphs of prose under a picture do not get read. */
+export const HAPPENED_POINT =
+  'The terms are finally being read, by a reader whose signature may not exist.';
+
+
 export const HAPPENED_TITLE = 'Every consent box ever built assumed a human read it.';
-
-export const HAPPENED_BODY =
-  'That assumption is the whole legal trick. You click, so you are presumed to know. The box never checks that you read it. It only needs your click.';
-
-export const HAPPENED_CARD_TITLE = 'What changed in this room';
-
-export const HAPPENED_CARD_BODY =
-  'A machine read the terms better than any human ever has, and found §4 in a second. Its answer may still be worth nothing: no law says a machine can agree for you.';
-
-export const HAPPENED_ASIDE =
-  'So the forms are finally being read — by a reader whose signature may not exist.';
 
 /* ---------------------------------------------------------- two futures */
 

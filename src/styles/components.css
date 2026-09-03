@@ -18,11 +18,14 @@
   gap: 6px;
 }
 
-.char svg {
+.char svg,
+.char__img {
   display: block;
   width: clamp(74px, 18vw, 104px);
   height: auto;
   overflow: visible;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .char__name {
@@ -47,7 +50,8 @@
     filter 1200ms var(--ease);
 }
 
-.char--thinking svg {
+.char--thinking svg,
+.char--thinking .char__img {
   animation: char-hum 1.5s ease-in-out infinite;
 }
 
@@ -347,11 +351,16 @@
 
 /* ------------------------------------------------------------ two futures */
 
+/* The two cards are rotated +/-0.7deg and carry a 3px 4px shadow, so each one
+ * reaches about 6px past its own grid cell. `.slide` clips with
+ * `overflow: hidden` and has zero horizontal slack, so those corners and the
+ * shadow were being shaved off. Inset the grid by the overhang instead. */
 .futures {
   align-self: stretch;
   display: grid;
   gap: var(--gap-sm);
   grid-template-columns: 1fr 1fr;
+  padding: 2px 6px 6px;
 }
 
 @media (max-width: 640px) {
@@ -737,10 +746,11 @@
   align-self: center;
   flex: 0 0 auto;
   width: 100%;
-  height: clamp(84px, 15vh, 132px);
+  height: clamp(120px, 21vh, 196px);
 }
 
-.illo svg {
+.illo svg,
+.illo__img {
   display: block;
   height: 100%;
   width: auto;
@@ -748,16 +758,64 @@
   overflow: visible;
 }
 
+/* The raster drawings carry their own transparent margin, so they need no
+ * padding here.
+ *
+ * Sized by HEIGHT, like the inline SVGs, and deliberately NOT by width with
+ * `object-fit`: these are 8:5 drawings in boxes that are far wider than 8:5,
+ * so `width: 100%` only stretched the element box and `contain` letterboxed
+ * the drawing inside it — the box grew to 353px while the art stayed at 179px.
+ * Height drives the real painted size, so the way to make them bigger is the
+ * height clamps below, bounded by the vertical budget: the stage is
+ * `overflow: hidden` above 768px, so anything taller is silently cut. */
+.illo__img {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .illo--sm {
-  height: clamp(52px, 8.5vh, 76px);
+  height: clamp(100px, 17vh, 150px);
 }
 
 .illo--md {
-  height: clamp(84px, 15vh, 132px);
+  height: clamp(120px, 21vh, 196px);
 }
 
 .illo--lg {
-  height: clamp(112px, 24vh, 200px);
+  height: clamp(156px, 30vh, 288px);
+}
+
+/* The bigger drawings are for tall viewports. On a short one — tablet
+ * landscape, a split window — the deck is height-constrained and
+ * `overflow: hidden`, so an illustration that takes 30vh silently squeezes the
+ * room's own panels (room 3's dashboard was losing 93px). Back off there and
+ * give the content its space back; the art is still larger than it was. */
+/* The seven type slides carry one line of text and a two-row logo grid, so
+ * they have room the other slides do not. Their own scale, above `lg`. */
+.illo--type {
+  height: clamp(168px, 34vh, 330px);
+}
+
+@media (max-height: 820px) and (min-width: 768px) {
+  .illo,
+  .illo--md {
+    height: clamp(96px, 15vh, 132px);
+  }
+
+  .illo--sm {
+    height: clamp(72px, 11vh, 100px);
+  }
+
+  .illo--lg {
+    height: clamp(120px, 21vh, 180px);
+  }
+
+  .illo--type {
+    height: clamp(140px, 26vh, 220px);
+  }
 }
 
 /* an unfilled slot renders nothing at all */
@@ -947,14 +1005,15 @@
   word-break: break-word;
 }
 
+/* NOT clamped. This is the tool's own description of what it does, and the
+ * whole argument of this site is that a page should say that honestly — so
+ * dropping the third line to save 17px is the one place not to economise.
+ * It wrapped to three lines at tablet widths and the last line vanished.
+ * `.split__side` around it already scrolls, so the text stays reachable. */
 .toollist__desc {
   font-size: var(--size-tiny);
   line-height: 1.35;
   color: var(--ink-soft);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 /* ---------------------------------------------------------------- restart */

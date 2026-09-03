@@ -240,7 +240,8 @@ button {
     align-items: stretch;
     overflow: hidden;
     /* bottom padding keeps the body row clear of the fixed Next button */
-    padding: clamp(12px, 2.4vh, 26px) clamp(16px, 4vw, 28px) clamp(64px, 8vh, 78px);
+    padding: clamp(12px, 2.4vh, 26px) clamp(16px, 4vw, 28px)
+      max(clamp(64px, 8vh, 78px), var(--chrome-clear));
   }
 
   .slide {
@@ -351,10 +352,22 @@ button {
 
 /* ------------------------------------------------------------ next button */
 
+/* Bottom-right chrome. `--chrome-gap` is the inset shared by the Next button
+ * and the wait note, and `--chrome-clear` is how much room the stage must
+ * reserve so neither sits on top of slide content: the inset plus the tallest
+ * of the two (the button, at ~50px). These were two independent numbers that
+ * drifted apart — the stage reserved 64px while the button occupied 84px from
+ * the bottom, so at 1024x768 it overlapped the futures list and the wait note
+ * covered the rooms' side panel. Derive one from the other instead. */
+:root {
+  --chrome-gap: clamp(14px, 4vw, 34px);
+  --chrome-clear: calc(var(--chrome-gap) + 58px);
+}
+
 .nextbtn {
   position: fixed;
-  right: clamp(14px, 4vw, 34px);
-  bottom: clamp(14px, 4vw, 34px);
+  right: var(--chrome-gap);
+  bottom: var(--chrome-gap);
   z-index: 30;
   display: inline-flex;
   align-items: center;
@@ -410,8 +423,8 @@ button {
 /* a soft hint of what is still needed before Next appears */
 .waitnote {
   position: fixed;
-  right: clamp(14px, 4vw, 34px);
-  bottom: clamp(14px, 4vw, 34px);
+  right: var(--chrome-gap);
+  bottom: var(--chrome-gap);
   z-index: 29;
   max-width: 46vw;
   padding: 6px 12px;

@@ -8,15 +8,12 @@ import {
   fitHeader,
   h,
   hand,
-  hasIllo,
   illo,
   lead,
   para,
-  raw,
 } from '../../engine/ui';
 import { cast } from '../../engine/characters';
 import type { Chapter, Slide } from '../../engine/types';
-import { ILLOS } from './illos';
 import { logoGrid } from './logos';
 import './types.css';
 
@@ -56,13 +53,41 @@ const TYPES: TypeBrief[] = [
   },
 ];
 
+/* 0 — why the seven types are worth walking through at all.
+ *
+ * Sets up the chapter: the pages ahead were each drawn for a single human
+ * visitor, and that assumption is the thing about to break. The drawing does
+ * the arguing; the slide keeps one line. */
+const arrivalSlide: Slide = {
+  id: 'types-arrival',
+  render(el, ctx) {
+    const art = illo('types-intro', { size: 'lg' });
+    art.classList.add('illo--type');
+    el.append(
+      fitHeader({
+        eyebrow: 'before the seven',
+        title: 'Every page you use was drawn for one visitor. A human one.',
+      }),
+      fitBody(
+        art,
+        lead(
+          'Agents are arriving far faster than any of these pages can be redrawn — and they are nothing like the visitor the page was built for. Here are the seven kinds of site they are walking into.',
+        ),
+      ),
+    );
+    ctx.done();
+  },
+};
+
 const typeSlide = (brief: TypeBrief, index: number): Slide => ({
   id: `types-${index + 1}`,
   render(el, ctx) {
     const slot = `type-${index + 1}`;
-    // The richer scene illustration if it has landed; the tiny animated glyph
-    // otherwise. Either way, one screen — no scrolling.
-    const art = hasIllo(slot) ? illo(slot, { size: 'md' }) : raw(ILLOS[index](), 'illo');
+    // These seven are the clearest drawings in the deck and this slide is the
+    // roomiest: one line of text and a two-row logo grid. `illo--type` gives
+    // them their own, larger scale rather than borrowing the deck's `lg`.
+    const art = illo(slot, { size: 'lg' });
+    art.classList.add('illo--type');
     el.append(
       fitHeader({ eyebrow: `type ${index + 1} of 7`, title: brief.name }),
       fitBody(
@@ -135,7 +160,7 @@ const handoffSlide: Slide = {
 const types: Chapter = {
   id: 'types',
   title: 'Seven types of site',
-  slides: [...TYPES.map(typeSlide), thesisSlide, handoffSlide],
+  slides: [arrivalSlide, ...TYPES.map(typeSlide), thesisSlide, handoffSlide],
 };
 
 export default types;

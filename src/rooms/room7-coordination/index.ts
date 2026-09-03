@@ -19,9 +19,10 @@ import { agent as agentChar } from '../../engine/characters';
 import { doorSlide, predictionSlide } from '../../engine/roomSlides';
 import type { Room, Slide, SlideContext } from '../../engine/types';
 import {
+  withClass,
+  illo,
   bubble,
   buttonRow,
-  card,
   compactToolCards,
   fitBody,
   fitHeader,
@@ -40,15 +41,11 @@ import type { PageTool } from '../../webmcp/bridge';
 import type { GhostStep } from '../../webmcp/ghost';
 
 import {
+  HAPPENED_POINT,
   BAD_FUTURE,
   BRIGHT_FUTURE,
   DOOR_LINE,
   FLIPPED_LINE,
-  HAPPENED_ASIDE,
-  HAPPENED_BODY,
-  HAPPENED_BODY_2,
-  HAPPENED_CARD_BODY,
-  HAPPENED_CARD_TITLE,
   HAPPENED_TITLE,
   OPTIONS_INTRO,
   PROMPT_HINT,
@@ -147,6 +144,8 @@ const optionsSlide: Slide = {
 
     const readProposal: PageTool = {
       name: 'read_proposal',
+      summary:
+        'The proposal, and how the count stands right now.',
       description:
         'Return the proposal being voted on here, the current count of positions for and against, and how those positions split between human, agent and mixed receipts. Also returns a few of the reasons people gave. No arguments.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
@@ -183,6 +182,8 @@ const optionsSlide: Slide = {
 
     const castPosition: PageTool = {
       name: 'cast_position',
+      summary:
+        'Casts a position, recorded with an agent receipt.',
       description:
         'Cast a position on the proposal on this page. It is recorded with an "agent" receipt, next to the human’s own position. You may vote against the human who asked you; say why in the reason.',
       inputSchema: {
@@ -343,10 +344,10 @@ const happenedSlide: Slide = {
         title: HAPPENED_TITLE,
       }),
       fitBody(
-        para(HAPPENED_BODY),
-        para(HAPPENED_BODY_2),
-        card(HAPPENED_CARD_TITLE, HAPPENED_CARD_BODY),
-        tiny(HAPPENED_ASIDE),
+        // The drawing is the explanation on this slide, so it gets the same
+        // generous scale as the type slides rather than the deck's `lg`.
+        withClass(illo('room-7-happened', { size: 'lg' }), 'illo--type'),
+        para(HAPPENED_POINT),
         bubble(
           disagreed
             ? `Your agent voted ${stance} while you voted ${humanPos}. Both are still on the board. Only one belongs to a person.`

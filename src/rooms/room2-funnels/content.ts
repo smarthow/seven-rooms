@@ -145,18 +145,13 @@ export const AGENT_REACTION_DETAIL =
 
 /* ----------------------------------------------------- what just happened */
 
+/** The single line this slide keeps. The drawing above it carries the
+ * argument; three paragraphs of prose under a picture do not get read. */
+export const HAPPENED_POINT =
+  'Two pre-ticked boxes are $156 a year, from someone who never asked for them.';
+
+
 export const HAPPENED_TITLE = 'The funnel worked on you. It had nothing to say to your agent.';
-
-export const HAPPENED_BODY =
-  'A checkout page is not a form. It is a machine built out of your feelings: hurry, doubt, and the small tiredness that makes a pre-ticked box easier to leave than to untick. Every test that built it assumed a human with limited patience.';
-
-export const HAPPENED_ASIDE =
-  'Your agent has no patience to run out and no embarrassment about clicking a link that calls it stupid. So the machine points at nobody, and the site made less money.';
-
-export const HAPPENED_CARD_TITLE = 'What the tricks are worth';
-
-export const HAPPENED_CARD_BODY =
-  'Two pre-ticked boxes are $13 a month — $156 a year — from a person who never asked for them. That is the growth chart.';
 
 /* ---------------------------------------------------------- two futures */
 

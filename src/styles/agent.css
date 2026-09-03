@@ -93,11 +93,22 @@
   min-height: 0;
 }
 
+/* `min-height: 0` and `overflow: auto` together are what stop the card from
+ * painting over the lines beneath it. The grid row gets squeezed on a short
+ * viewport, but a flex item will not shrink past its content unless
+ * `min-height` is cleared — so the card kept its full 519px inside a 402px
+ * row and, being `overflow: visible`, spilled 117px straight over the
+ * "Remembered from earlier" and "A page cannot tell…" lines below. Clipping to
+ * its own border keeps the card honest; the tighter type on short viewports
+ * below means it rarely has to scroll. */
 .choice {
   display: flex;
   flex-direction: column;
   gap: 8px;
   min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
   padding: clamp(10px, 1.5vh, 16px) clamp(12px, 1.5vw, 18px);
   border: var(--border) solid var(--ink);
   border-radius: var(--radius-lg);
@@ -135,14 +146,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  max-height: clamp(46px, 8.5vh, 82px);
+  max-height: clamp(78px, 14vh, 142px);
   overflow: hidden;
 }
 
 .choice__illo svg {
   max-width: 100%;
-  max-height: clamp(46px, 8.5vh, 82px);
+  max-height: clamp(78px, 14vh, 142px);
   height: auto;
+}
+
+/* Height-led, same as the SVG above it: the card is ~360px wide but the
+ * drawing is 8:5, so filling the width would letterbox rather than enlarge. */
+.choice__illo .illo__img {
+  height: clamp(78px, 14vh, 142px);
+  width: auto;
+  max-width: 100%;
+}
+
+@media (max-height: 820px) and (min-width: 768px) {
+  .choice {
+    gap: 5px;
+  }
+
+  .choice__illo,
+  .choice__illo svg,
+  .choice__illo .illo__img {
+    max-height: clamp(56px, 9.5vh, 88px);
+  }
+
+  .choice__illo .illo__img {
+    height: clamp(56px, 9.5vh, 88px);
+  }
 }
 
 .choice__title {

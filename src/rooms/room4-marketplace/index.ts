@@ -19,9 +19,10 @@ import { agent as agentChar } from '../../engine/characters';
 import { doorSlide, predictionSlide } from '../../engine/roomSlides';
 import type { Room, Slide, SlideContext } from '../../engine/types';
 import {
+  withClass,
+  illo,
   bubble,
   buttonRow,
-  card,
   compactToolCards,
   fitBody,
   fitHeader,
@@ -40,14 +41,11 @@ import type { PageTool } from '../../webmcp/bridge';
 import type { GhostStep } from '../../webmcp/ghost';
 
 import {
+  HAPPENED_POINT,
   ACCEPT_LINE,
   BAD_FUTURE,
   BRIGHT_FUTURE,
   DOOR_LINE,
-  HAPPENED_ASIDE,
-  HAPPENED_BODY,
-  HAPPENED_CARD_BODY,
-  HAPPENED_CARD_TITLE,
   HAPPENED_TITLE,
   OFFERS,
   OPTIONS_INTRO,
@@ -122,6 +120,8 @@ const optionsSlide: Slide = {
 
     const searchOffers: PageTool = {
       name: 'search_offers',
+      summary:
+        'Lists the three offers. The seller sees you looking.',
       description:
         'List the three offers on this page with their current prices and main details. Takes a search query string. The seller runs its own agent on this page, it sees this call, and prices can change within a second of you reading them.',
       inputSchema: {
@@ -153,6 +153,8 @@ const optionsSlide: Slide = {
 
     const makeOffer: PageTool = {
       name: 'make_offer',
+      summary:
+        'Proposes a price. It cannot close the deal — that stays yours.',
       description:
         'Propose a price in US dollars for one offer, by its id. Returns the seller agent’s reply: it may accept, counter, or hold. It counters less generously every round and will not go below its own reservation price, so a lowball buys nothing and hardens it. This tool cannot close the deal — accepting a counter or walking away is a human decision.',
       inputSchema: {
@@ -293,9 +295,10 @@ const happenedSlide: Slide = {
         title: HAPPENED_TITLE,
       }),
       fitBody(
-        para(HAPPENED_BODY),
-        card(HAPPENED_CARD_TITLE, HAPPENED_CARD_BODY),
-        para(HAPPENED_ASIDE),
+        // The drawing is the explanation on this slide, so it gets the same
+        // generous scale as the type slides rather than the deck's `lg`.
+        withClass(illo('room-4-happened', { size: 'lg' }), 'illo--type'),
+        para(HAPPENED_POINT),
         bubble(
           bids > 0
             ? `Your agent made ${bids} offer${bids === 1 ? '' : 's'}. Theirs answered every one, and never had to sleep on it.`

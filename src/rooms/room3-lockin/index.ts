@@ -26,9 +26,10 @@ import { agent as agentChar } from '../../engine/characters';
 import { doorSlide, predictionSlide } from '../../engine/roomSlides';
 import type { Room, Slide, SlideContext } from '../../engine/types';
 import {
+  withClass,
+  illo,
   bubble,
   buttonRow,
-  card,
   compactToolCards,
   fitBody,
   fitHeader,
@@ -47,16 +48,12 @@ import type { PageTool } from '../../webmcp/bridge';
 import type { GhostStep } from '../../webmcp/ghost';
 
 import {
+  HAPPENED_POINT,
   BAD_FUTURE,
   BRIGHT_FUTURE,
   CONTACTS,
-  COST_BREAKDOWN,
   DOOR_LINE,
   FILES,
-  HAPPENED_ASIDE,
-  HAPPENED_BODY,
-  HAPPENED_CARD_BODY,
-  HAPPENED_CARD_TITLE,
   HAPPENED_TITLE,
   LIST_LINE,
   NOTES,
@@ -171,6 +168,8 @@ const optionsSlide: Slide = {
 
     const listMyData: PageTool = {
       name: 'list_my_data',
+      summary:
+        'How many contacts, notes and files are in here.',
       description:
         'List what this dashboard holds about the signed-in user: how many contacts, notes and files there are, and what kinds. Read-only. No arguments.',
       inputSchema: { type: 'object', properties: {}, additionalProperties: false },
@@ -202,6 +201,8 @@ const optionsSlide: Slide = {
 
     const exportEverything: PageTool = {
       name: 'export_everything',
+      summary:
+        'Takes everything out as one portable bundle.',
       description:
         'Export everything this dashboard holds about the signed-in user as one portable bundle, in json or csv. Returns a summary of the bundle: counts and the first item of each kind.',
       inputSchema: {
@@ -325,7 +326,6 @@ const happenedSlide: Slide = {
   render(el: HTMLElement, ctx: SlideContext) {
     const calls = ctx.log.byRoom(ROOM_NUMBER);
     const didExport = calls.some((entry) => entry.tool === 'export_everything');
-    const hours = COST_BREAKDOWN.map((line) => `${line.label} — ${line.hours}h`).join(' · ');
 
     el.append(
       fitHeader({
@@ -333,10 +333,10 @@ const happenedSlide: Slide = {
         title: HAPPENED_TITLE,
       }),
       fitBody(
-        para(HAPPENED_BODY),
-        card(HAPPENED_CARD_TITLE, HAPPENED_CARD_BODY),
-        tiny(hours),
-        para(HAPPENED_ASIDE),
+        // The drawing is the explanation on this slide, so it gets the same
+        // generous scale as the type slides rather than the deck's `lg`.
+        withClass(illo('room-3-happened', { size: 'lg' }), 'illo--type'),
+        para(HAPPENED_POINT),
         bubble(
           didExport
             ? 'Your data left through a door the site built and then forgot was a door.'

@@ -185,6 +185,9 @@ export function cardRow(...children: Child[]): HTMLElement {
 export interface ToolCardTool {
   name: string;
   description: string;
+  /** The one line shown to the person. See `PageTool.summary` — the panel
+   * shows this and the agent still receives the full `description`. */
+  summary?: string;
 }
 
 /* ------------------------------------------------------------- promptHint */
@@ -501,7 +504,7 @@ export function compactToolCards(tools: ToolCardTool[]): HTMLElement {
         'div',
         { class: 'toollist__item', 'data-tool': tool.name },
         h('div', { class: 'toollist__name' }, `${tool.name}()`),
-        h('div', { class: 'toollist__desc' }, tool.description),
+        h('div', { class: 'toollist__desc' }, tool.summary ?? tool.description),
       ),
     ),
   );
@@ -510,6 +513,13 @@ export function compactToolCards(tools: ToolCardTool[]): HTMLElement {
 /* ------------------------------------------------------------------ illo */
 
 /** True when the illustration registry has this slot filled. */
+/** Adds a class to an element and returns it, so a slide can size one illo
+ * differently without unpacking the call into two statements. */
+export function withClass<T extends HTMLElement>(el: T, ...classes: string[]): T {
+  el.classList.add(...classes);
+  return el;
+}
+
 export function hasIllo(name: string): boolean {
   return typeof getIllo(name) === 'string';
 }
