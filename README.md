@@ -134,10 +134,30 @@ Each room ends with two concrete futures instead of one prediction:
 Everything the site knows about the browser API lives in one file: **`src/webmcp/bridge.ts`**. If the
 spec moves, that is the only file to patch.
 
+### The API call itself
+
+Underneath every one of this site's 24 tools is the standard WebMCP call, made in
+[`src/webmcp/bridge.ts`](src/webmcp/bridge.ts):
+
+```js
+document.modelContext.registerTool({
+  name: "search_products",
+  description: "Search the product catalog",
+  inputSchema: { /* ... */ },
+  execute: async (input) => { /* ... */ },
+});
+```
+
+In the source that same call reads `found.mc.registerTool(descriptor, { signal })`, where `found.mc`
+is `document.modelContext` resolved once by `findModelContext()`. The indirection buys two things and
+changes nothing about the API: the deprecated `navigator.modelContext` still works for older
+prototype surfaces, and the polyfill fallback shares one code path with the native surface. The
+descriptor and the `execute` contract are the spec's, untouched.
+
 ### Registration lifecycle
 
 A room writes a `PageTool` — a name, an honest description, a JSON Schema, and an `execute` that
-returns a plain value — and calls `registerPageTool(tool)`:
+returns a plain value — and calls `registerPageTool(tool)`, the thin wrapper around that call:
 
 ```ts
 const off = registerPageTool({

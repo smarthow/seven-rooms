@@ -65,30 +65,71 @@ export const LOGOS: SimpleIcon[][] = [
   [siWikipedia, siGithub, siDiscord, siTrello, siAsana, siStackoverflow],
 ];
 
-function mark(icon: SimpleIcon): SVGSVGElement {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const VIEWBOX_PAD = 0.4;
+
+/* Simple Icons squeezes every mark into 24 × 24, so a wide wordmark (eBay,
+ * Uber) comes out a third the size of a square icon unless the viewBox is
+ * fitted to the path's real bounds. `getBBox()` only answers for a *rendered*
+ * element, and a mark built for a slide that is still transitioning in is not
+ * rendered yet: measuring there returned zeros, the `catch` swallowed it, and
+ * the mark stayed squeezed until something later forced a refit. So measure
+ * against a ruler that is always rendered, once per path, before first paint.
+ */
+const viewBoxCache = new Map<string, string>();
+let ruler: SVGSVGElement | null = null;
+
+function measuringRuler(): SVGSVGElement | null {
+  if (ruler) return ruler;
+  if (!document.body) return null;
+  const svg = document.createElementNS(SVG_NS, 'svg');
   svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  // Rendered — so getBBox answers — but invisible and out of flow. NOT
+  // `display: none`, which would make it unrendered and useless here.
+  svg.style.cssText =
+    'position:absolute;left:-9999px;top:0;width:24px;height:24px;opacity:0;pointer-events:none';
+  document.body.appendChild(svg);
+  ruler = svg;
+  return ruler;
+}
+
+/** The viewBox that makes this mark fill its box. Falls back to 24 × 24. */
+function viewBoxFor(icon: SimpleIcon): string {
+  const cached = viewBoxCache.get(icon.path);
+  if (cached) return cached;
+  const host = measuringRuler();
+  if (!host) return '0 0 24 24';
+  const probe = document.createElementNS(SVG_NS, 'path');
+  probe.setAttribute('d', icon.path);
+  host.appendChild(probe);
+  try {
+    const b = probe.getBBox();
+    if (b.width > 0 && b.height > 0) {
+      const box = `${b.x - VIEWBOX_PAD} ${b.y - VIEWBOX_PAD} ${b.width + VIEWBOX_PAD * 2} ${b.height + VIEWBOX_PAD * 2}`;
+      // Only a real measurement is cached, so a failure here retries later
+      // rather than freezing every mark at the square default.
+      viewBoxCache.set(icon.path, box);
+      return box;
+    }
+  } catch {
+    /* no answer from the layout engine — the square default still draws. */
+  } finally {
+    probe.remove();
+  }
+  return '0 0 24 24';
+}
+
+function mark(icon: SimpleIcon): SVGSVGElement {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', viewBoxFor(icon));
   svg.setAttribute('role', 'img');
   svg.setAttribute('aria-label', icon.title);
   svg.classList.add('logogrid__mark');
   svg.style.setProperty('--brand', `#${icon.hex}`);
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const path = document.createElementNS(SVG_NS, 'path');
   path.setAttribute('d', icon.path);
   svg.appendChild(path);
-  // Simple Icons squeezes every mark into 24 × 24, so a wide wordmark (eBay,
-  // Uber) comes out a third the size of a square icon. Once the path is on
-  // screen, fit the viewBox to its real bounds so all marks fill the same box.
-  requestAnimationFrame(() => {
-    try {
-      const b = path.getBBox();
-      if (b.width > 0 && b.height > 0) {
-        const pad = 0.4;
-        svg.setAttribute('viewBox', `${b.x - pad} ${b.y - pad} ${b.width + pad * 2} ${b.height + pad * 2}`);
-      }
-    } catch {
-      /* not rendered yet (hidden pane) — the 24 × 24 default is fine */
-    }
-  });
   return svg;
 }
 

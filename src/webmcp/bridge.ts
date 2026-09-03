@@ -29,6 +29,7 @@
  */
 
 import { startDomBridge, syncDomManifest } from './domBridge';
+import type { DomBridgeTool } from './domBridge';
 import type { AgentMode, AgentSurface, SlideContext } from '../engine/types';
 import { store } from '../engine/store';
 import { activityLog } from './activity';
@@ -257,9 +258,25 @@ export function onRegistryChange(fn: RegistryListener): () => void {
   return () => registryListeners.delete(fn);
 }
 
+/**
+ * The registry as the DOM manifest publishes it. An isolated-world agent must
+ * not get less than a native one, so this includes the derived title and the
+ * annotations — including the readOnlyHint / untrustedContentHint it would use
+ * to decide what is safe to call.
+ */
+function manifestTools(): DomBridgeTool[] {
+  return listPageTools().map((t) => ({
+    name: t.name,
+    title: t.title ?? titleFromName(t.name),
+    description: t.description,
+    inputSchema: t.inputSchema,
+    ...(t.annotations ? { annotations: t.annotations } : {}),
+  }));
+}
+
 /** Rewrite the DOM manifest and tell anyone watching the registry. */
 function registryChanged(): void {
-  syncDomManifest(listPageTools());
+  syncDomManifest(manifestTools());
   for (const fn of [...registryListeners]) {
     try {
       fn();
@@ -309,6 +326,16 @@ export function registerPageTool(tool: PageTool): () => void {
 
   if (found) {
     try {
+      // `found.mc` IS the standard surface — `document.modelContext` (or the
+      // deprecated `navigator.modelContext`), resolved once by
+      // findModelContext() above. So this is the spec call, verbatim:
+      //
+      //   document.modelContext.registerTool({
+      //     name, description, inputSchema, execute,
+      //   });
+      //
+      // It goes through the resolved reference only so one code path can serve
+      // the native surface and the polyfill.
       const registration = found.mc.registerTool(
         {
           name: tool.name,
@@ -407,13 +434,6 @@ export async function invokePageTool(
  * It gets the title and annotations too, so an isolated-world agent reads
  * exactly what a native one does. */
 startDomBridge({
-  list: () =>
-    listPageTools().map((t) => ({
-      name: t.name,
-      title: t.title ?? titleFromName(t.name),
-      description: t.description,
-      inputSchema: t.inputSchema,
-      ...(t.annotations ? { annotations: t.annotations } : {}),
-    })),
+  list: manifestTools,
   invoke: (name, args) => invokePageTool(name, args),
 });

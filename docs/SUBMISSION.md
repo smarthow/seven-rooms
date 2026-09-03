@@ -216,10 +216,10 @@ Practical notes for the shoot:
 
 | Requirement | Where it is satisfied | Status |
 | --- | --- | --- |
-| **Live, publicly reachable URL** | Static build of `dist/`, served over HTTPS at the top level. Deploy notes: README → *Deploy*. | **TODO — paste the URL here, in `README.md` ("Try it in 60 seconds") and in `package.json`'s `homepage`.** |
+| **Live, publicly reachable URL** | https://sevenrooms.smarthow.com — static build of `dist/`, served over HTTPS at the top level by a Cloudflare Worker. Also in `README.md` ("Try it in 60 seconds") and `package.json`'s `homepage`. Deploy notes: README → *Deploy*. | Done |
 | **Description of the project** | This file, sections (a)–(d). Short version: the one-paragraph description at the top. Reader-facing version: `README.md` → *What is this?* | Done |
 | **Demo video** | Script and shot list above. | **TODO — record and paste the link at the top of this file.** |
-| **Public repo** | https://github.com/SmartHow/seven-rooms | Done (make the repo public at publish time) |
+| **Public repo** | https://github.com/smarthow/seven-rooms | Done |
 | **Visible open-source license** | `LICENSE` (MIT) at the repo root; MIT badge at the top of `README.md`; `"license": "MIT"` in `package.json`. | Done |
 | **Uses WebMCP substantively** | 24 tools total (5 site + 19 room), registered on `document.modelContext` via `src/webmcp/bridge.ts`. See section (d). | Done |
 | **Real registration, not a mock** | `src/webmcp/bridge.ts` → `registerPageTool`; `src/webmcp/siteTools.ts`; every `src/rooms/*/index.ts`. Native API used untouched when present; polyfill only as a fallback (`src/main.ts`). | Done |

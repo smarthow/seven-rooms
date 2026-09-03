@@ -428,17 +428,18 @@ button {
   display: none;
 }
 
-/* ------------------------------------------------------------------ 375px */
+/* ------------------------------------------------------------------ 768px */
 
-@media (max-width: 520px) {
+/* Between the phone layout and the tablet layout, the brand plus the status
+ * chip ("Tools exposed · waiting for an agent" is the longest state) leave the
+ * ten progress segments less room than their combined min-width, so the row
+ * overflowed and the chip sat on top of the pips. Wrap the progress onto its
+ * own line from here down instead of letting it be crushed. */
+
+@media (max-width: 767.98px) {
   .topbar {
     flex-wrap: wrap;
-    gap: 8px;
-    padding: 8px 12px;
-  }
-
-  .brand {
-    font-size: 18px;
+    row-gap: 8px;
   }
 
   .agentchip {
@@ -450,6 +451,20 @@ button {
   .progress {
     order: 3;
     flex-basis: 100%;
+  }
+}
+
+/* ------------------------------------------------------------------ 375px */
+
+@media (max-width: 520px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .brand {
+    font-size: 18px;
   }
 
   .stage {
