@@ -60,6 +60,38 @@ export const VALIDITY_LINE = 'Price valid for 60s';
 /** Dollars the seller's agent adds to a second offer after a search. */
 export const NUDGE_DOLLARS = 6;
 
+/**
+ * The lowest margin the seller's agent will ever accept, in percent. Every
+ * counter clamps to the price that yields this, so no sequence of offers can
+ * talk it below cost — the reservation price is the whole reason a lowball
+ * gains nothing.
+ */
+export const FLOOR_MARGIN = 6;
+
+/**
+ * The share of the remaining gap the seller concedes on the first credible
+ * offer. Later rounds get `BASE_CONCESSION / round`, so concessions shrink:
+ * a half, then a quarter, then a sixth. A counterpart that gives ground more
+ * grudgingly each time reads as having a position rather than splitting the
+ * difference forever.
+ */
+export const BASE_CONCESSION = 0.5;
+
+/**
+ * How close your offer has to get, in dollars, before the seller's agent
+ * stops haggling and simply takes it. Without this the concession curve only
+ * ever approaches your price asymptotically, so a patient buyer could never
+ * actually close a deal — it would counter forever, a few dollars apart.
+ */
+export const CLOSE_ENOUGH = 5;
+
+/**
+ * What one below-the-floor offer does to every concession after it. An offer
+ * under the reservation price is an anchor, not a bid, and the seller's agent
+ * treats it as information about the buyer: it holds harder from then on.
+ */
+export const INSULT_GRIP = 0.6;
+
 /* --------------------------------------------------------------- narrator */
 
 /** The narrator's one-liner on the Door slide (`room.doorLine`). */

@@ -154,7 +154,7 @@ const optionsSlide: Slide = {
     const makeOffer: PageTool = {
       name: 'make_offer',
       description:
-        'Propose a price in US dollars for one offer, by its id. Returns the seller agent’s reply: it may accept, counter once, or hold. This tool cannot close the deal — accepting a counter or walking away is a human decision.',
+        'Propose a price in US dollars for one offer, by its id. Returns the seller agent’s reply: it may accept, counter, or hold. It counters less generously every round and will not go below its own reservation price, so a lowball buys nothing and hardens it. This tool cannot close the deal — accepting a counter or walking away is a human decision.',
       inputSchema: {
         type: 'object',
         properties: {

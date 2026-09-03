@@ -20,6 +20,10 @@
 import { button, buttonRow, h, meter, raw, stat, statRow, tiny } from '../../engine/ui';
 import type { MeterHandle } from '../../engine/ui';
 import {
+  BASE_CONCESSION,
+  CLOSE_ENOUGH,
+  FLOOR_MARGIN,
+  INSULT_GRIP,
   MARGIN_START,
   NUDGE_DOLLARS,
   OFFERS,
@@ -88,10 +92,29 @@ export interface MarketSandbox {
 }
 
 interface OfferState extends OfferView {
+  /**
+   * The authoritative asking price, updated SYNCHRONOUSLY as the negotiation
+   * moves. `price` is the number on screen and lags by REACTION_MS, because
+   * the seller's agent is meant to be visibly slow. The negotiation cannot
+   * read the lagging one: two offers inside 600ms would both price against a
+   * stale ask, and since each round concedes a smaller share of the gap, the
+   * counter would climb instead of converge.
+   */
+  ask: number;
   /** Its price has already been nudged once. */
   nudged: boolean;
   /** How many offers your agent has made on it. */
   rounds: number;
+  /** How many below-the-floor offers your agent has made on it. */
+  stubborn: number;
+  /** Whether the seller has told you this price is final. It says so in two
+   * places, and without remembering it a buyer can ratchet the price down in
+   * CLOSE_ENOUGH-sized steps, each one "the last", all the way to the floor. */
+  settled: boolean;
+  /** Whether this listing has already counted once in the win/loss tally.
+   * Without it a patient agent farms one "win" per round while extracting a
+   * dollar at a time, and the scoreboard measures round count, not success. */
+  scored: boolean;
   priceEl: HTMLElement;
   noteEl: HTMLElement;
   cardEl: HTMLElement;
@@ -142,10 +165,14 @@ export function createMarketSandbox(): MarketSandbox {
       id: seed.id,
       name: seed.name,
       price: seed.list,
+      ask: seed.list,
       list: seed.list,
       attributes: seed.attributes.slice(),
       nudged: false,
       rounds: 0,
+      stubborn: 0,
+      settled: false,
+      scored: false,
       priceEl,
       noteEl,
       cardEl,
@@ -232,6 +259,15 @@ export function createMarketSandbox(): MarketSandbox {
     if (price <= 0) return 0;
     return ((price - cost) / price) * 100;
   };
+
+  /** One rounding rule for every price the negotiation computes. Floats drift,
+   * and a negotiation whose outcome depends on drift is not deterministic. */
+  const cents = (v: number) => Math.round(v * 100) / 100;
+
+  /** The reservation price: the least this listing can be sold for. A pure
+   * function of the seed, so it is the same on every run. */
+  const floorFor = (o: OfferState) =>
+    cents((o.list * (1 - MARGIN_START / 100)) / (1 - FLOOR_MARGIN / 100));
 
   /* ------------------------------------------------------- human controls */
 
@@ -357,6 +393,7 @@ export function createMarketSandbox(): MarketSandbox {
       if (target) {
         const before = target.price;
         target.price = Number((before + NUDGE_DOLLARS).toFixed(2));
+        target.ask = target.price;
         target.nudged = true;
         paintPrice(target);
         sellerLog(`nudged ${target.name}: ${money(before)} → ${money(target.price)}`);
@@ -403,7 +440,7 @@ export function createMarketSandbox(): MarketSandbox {
 
     negotiatedId = o.id;
     o.rounds += 1;
-    const ask = o.price;
+    const ask = o.ask;
     sellerLog(`an offer of ${money(want)} on ${o.name}, ask is ${money(ask)}`, 'sees');
 
     // At or above the ask: the seller takes it instantly and keeps everything.
@@ -429,47 +466,129 @@ export function createMarketSandbox(): MarketSandbox {
       };
     }
 
-    // First round under the ask: meet halfway, once.
-    if (o.rounds === 1) {
-      const counter = Number(((want + ask) / 2).toFixed(2));
+    const floor = floorFor(o);
+
+    // Under the floor is not a bid, it is an anchor. Conceding to it would
+    // sell below cost, and rewarding it would make lowballing the winning
+    // move in a room about agents negotiating. So the seller gives nothing
+    // and remembers: every later concession on this listing is smaller.
+    if (want < floor) {
+      o.stubborn += 1;
       schedule(() => {
-        o.price = counter;
-        paintPrice(o);
-        wins += 1;
-        paintTally();
-        setMargin(marginAt(o, counter));
+        if (!o.scored) {
+          losses += 1;
+          o.scored = true;
+          paintTally();
+        }
+        // A relative nudge, not marginAt(): the meter is one shared readout,
+        // and recomputing it from an untouched listing's ask would snap it
+        // back to the starting margin and erase a negotiation on another one.
+        setMargin(marginValue + 0.3);
         acceptBtn.disabled = false;
-        sellerLog(`counters ${money(counter)} on ${o.name} — halfway, once.`);
+        sellerLog(
+          `holds at ${money(ask)} — ${money(want)} is under what this room can be sold for. it will concede less from here.`,
+        );
+      });
+      return {
+        ok: true,
+        offer_id: o.id,
+        your_price: want,
+        seller_response: 'held',
+        counter_price: ask,
+        message: `Held at ${money(ask)}. ${money(want)} is below the lowest price this room can be sold for, and an offer that low makes the seller's agent concede less on every round after it.`,
+        decision: 'Accepting or walking away is the human\u2019s call, not this tool\u2019s.',
+      };
+    }
+
+    // It already said this price was final. Saying it again is the only
+    // consistent move: otherwise each "last" price invites one more nibble.
+    if (o.settled) {
+      schedule(() => {
+        setNote(o, VALIDITY_LINE);
+        setMargin(marginValue + 0.3);
+        acceptBtn.disabled = false;
+        sellerLog(`holds at ${money(ask)} on ${o.name} — it already called that its last price.`);
+      });
+      return {
+        ok: true,
+        offer_id: o.id,
+        your_price: want,
+        seller_response: 'held',
+        counter_price: ask,
+        valid_for_seconds: 60,
+        message: `Held at ${money(ask)}. The seller's agent already called that its last price on this room, and it does not reopen.`,
+        decision: 'Accepting or walking away is the human\u2019s call, not this tool\u2019s.',
+      };
+    }
+
+    // Once your offer is this close, haggling costs the seller more than the
+    // gap is worth, so it drops its ask to your price and stops moving. It
+    // does NOT close the deal: make_offer promises it cannot, and pressing
+    // accept stays the human's call so the room's closing narration fires.
+    if (ask - want <= CLOSE_ENOUGH) {
+      o.settled = true;
+      o.ask = want;
+      schedule(() => {
+        o.price = want;
+        paintPrice(o);
+        if (!o.scored) {
+          wins += 1;
+          o.scored = true;
+          paintTally();
+        }
+        setMargin(marginAt(o, want));
+        setNote(o, VALIDITY_LINE);
+        acceptBtn.disabled = false;
+        sellerLog(`drops to ${money(want)} on ${o.name} — the gap is worth less than the argument. it will not move again.`);
       });
       return {
         ok: true,
         offer_id: o.id,
         your_price: want,
         seller_response: 'countered',
-        counter_price: counter,
-        message: `Countered at ${money(counter)}, halfway between your ${money(want)} and the ${money(ask)} ask.`,
-        decision: 'Accepting or walking away is the human’s call, not this tool’s.',
+        counter_price: want,
+        valid_for_seconds: 60,
+        message: `It came down to your ${money(want)} and stopped there \u2014 within ${money(CLOSE_ENOUGH)} of the ${money(ask)} ask, close enough that arguing costs more than the gap. This is as low as it goes.`,
+        decision: 'Accepting or walking away is the human\u2019s call, not this tool\u2019s.',
       };
     }
 
-    // After that it holds, and starts a clock.
+    // A credible offer. Concede a shrinking share of the remaining gap --
+    // half, then a quarter, then a sixth -- tightened by any earlier lowball,
+    // and never past the reservation price.
+    const grip = INSULT_GRIP ** o.stubborn;
+    const counter = Math.max(cents(ask - (ask - want) * (BASE_CONCESSION / o.rounds) * grip), floor);
+    // The clamp bit, so this is the reservation price: it genuinely cannot go
+    // lower, and only now is "price valid for 60s" a true statement.
+    const spent = counter <= floor;
+    if (spent) o.settled = true;
+    o.ask = counter;
+
+    // Otherwise it moves, grudgingly, and the human decides what to do next.
     schedule(() => {
-      setNote(o, VALIDITY_LINE);
-      losses += 1;
-      paintTally();
-      setMargin(marginValue + 0.3);
+      o.price = counter;
+      paintPrice(o);
+      if (!o.scored) {
+        wins += 1;
+        o.scored = true;
+        paintTally();
+      }
+      setMargin(marginAt(o, counter));
       acceptBtn.disabled = false;
-      sellerLog(`holds at ${money(ask)} and adds “${VALIDITY_LINE}”.`);
+      if (spent) setNote(o, VALIDITY_LINE);
+      sellerLog(
+        `counters ${money(counter)} on ${o.name} — round ${o.rounds}, so it gave up less of the gap than last time.`,
+      );
     });
     return {
       ok: true,
       offer_id: o.id,
       your_price: want,
-      seller_response: 'held',
-      counter_price: ask,
-      valid_for_seconds: 60,
-      message: `Held at ${money(ask)} and added “${VALIDITY_LINE}”. It moved once and will not move again.`,
-      decision: 'Accepting or walking away is the human’s call, not this tool’s.',
+      seller_response: 'countered',
+      counter_price: counter,
+      ...(spent ? { valid_for_seconds: 60 } : {}),
+      message: `Countered at ${money(counter)}. It conceded ${money(cents(ask - counter))} of the ${money(cents(ask - want))} you asked for — round ${o.rounds}, and each round it gives up less.`,
+      decision: 'Accepting or walking away is the human\u2019s call, not this tool\u2019s.',
     };
   };
 
