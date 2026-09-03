@@ -1,0 +1,288 @@
+/* agent.css — the agent surface: the four-state status chip, and the intro's
+   "Choose your agent" slide.
+
+   Kept in its own file on purpose: base.css / components.css / tokens.css are
+   owned by another agent right now. Nothing here invents a colour — every value
+   comes from tokens.css. */
+
+/* ------------------------------------------------ status chip, four states */
+
+/* none — nothing to talk to. Grey, quiet. */
+.agentchip--none .agentchip__dot {
+  background: var(--ink-faint);
+  box-shadow: none;
+}
+
+.agentchip--none {
+  opacity: 0.8;
+}
+
+/* api — the tools are out there and nobody has called them yet. The pulse IS
+   the page waiting: it is the only state that moves. */
+.agentchip--api .agentchip__dot {
+  background: var(--agent);
+  animation: agentchip-wait 1900ms var(--ease) infinite;
+}
+
+@keyframes agentchip-wait {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--agent-wash);
+    opacity: 0.65;
+  }
+  50% {
+    box-shadow: 0 0 0 5px var(--agent-wash);
+    opacity: 1;
+  }
+}
+
+/* agent — a real agent called handshake(). Solid, and the ring stays. */
+.agentchip--agent .agentchip__dot {
+  background: var(--agent);
+  box-shadow: 0 0 0 3px var(--agent-wash);
+}
+
+.agentchip--agent {
+  border-color: var(--agent);
+}
+
+/* ghost — the simulation. Faint, hollow: a dot that is not really there. */
+.agentchip--ghost .agentchip__dot {
+  background: var(--paper-card);
+  border: 2px solid var(--ink-faint);
+  box-shadow: none;
+}
+
+/* the dark "locked out" state from base.css still wins on top of all four */
+.agentchip--dark .agentchip__dot {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agentchip--api .agentchip__dot {
+    animation: none;
+    box-shadow: 0 0 0 4px var(--agent-wash);
+  }
+}
+
+/* ------------------------------------------------------ intro: tight header */
+
+.title--tight {
+  margin-bottom: 0;
+  font-size: clamp(22px, 3.4vw, 32px);
+}
+
+.cardrow--tight {
+  gap: var(--gap-sm);
+}
+
+.cardrow--tight .card__body {
+  font-size: var(--size-small);
+}
+
+/* -------------------------------------------- intro: "Choose your agent" */
+
+.choicerow {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: var(--gap-sm);
+  align-items: stretch;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  min-height: 0;
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: clamp(10px, 1.5vh, 16px) clamp(12px, 1.5vw, 18px);
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius-lg);
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  text-align: left;
+}
+
+.choice--agent {
+  border-color: var(--agent);
+}
+
+.choice--ghost {
+  background: var(--paper-deep);
+  border-style: dashed;
+}
+
+/* a handshake landed: the card leans forward */
+.choice--live {
+  box-shadow: var(--shadow-sketch-lift);
+  background: var(--agent-wash);
+}
+
+.choicelede {
+  margin: 0 auto;
+  max-width: 46ch;
+  text-align: center;
+  font-size: clamp(16px, 1.9vw, 19px);
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+.choice__illo {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: clamp(46px, 8.5vh, 82px);
+  overflow: hidden;
+}
+
+.choice__illo svg {
+  max-width: 100%;
+  max-height: clamp(46px, 8.5vh, 82px);
+  height: auto;
+}
+
+.choice__title {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.choice__tag {
+  margin-left: 8px;
+  padding: 1px 7px;
+  border: 2px solid var(--ink-faint);
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  vertical-align: 2px;
+  white-space: nowrap;
+}
+
+.choice__steps {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--ink-soft);
+}
+
+.choice__steps code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  padding: 0 3px;
+  border-radius: 4px;
+  background: var(--accent-wash);
+  overflow-wrap: break-word;
+}
+
+/* a flag or an API name must never be split across two lines */
+.choice__flag {
+  display: inline-block;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.choice__body {
+  margin: 0;
+  font-size: var(--size-small);
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.choice .prompthint {
+  margin: 0;
+}
+
+.choice__status {
+  margin-top: auto;
+  padding-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.choice__status--on {
+  color: var(--agent);
+  font-weight: 700;
+}
+
+.choice__btn {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.choice__remembered {
+  margin: 0 auto;
+  font-size: var(--size-tiny);
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.choice__swap {
+  color: var(--ink-faint);
+}
+
+@media (max-width: 767px) {
+  .choicerow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ------------------------------------------------------- agent console */
+.agentconsole {
+  position: fixed;
+  left: 14px;
+  bottom: 14px;
+  z-index: 40;
+  max-width: min(440px, calc(100vw - 28px));
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 0.35rem 0.6rem;
+  font: 400 0.8rem/1.35 'Nunito', system-ui, sans-serif;
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.agentconsole__summary {
+  cursor: pointer;
+  font: 700 0.8rem/1 'Caveat', cursive;
+  font-size: 1rem;
+  opacity: 0.75;
+  list-style: none;
+  user-select: none;
+}
+.agentconsole__summary::-webkit-details-marker { display: none; }
+.agentconsole__summary::before { content: '▸ '; }
+.agentconsole[open] .agentconsole__summary::before { content: '▾ '; }
+.agentconsole[open] .agentconsole__summary { opacity: 1; }
+.agentconsole__help, .agentconsole__tools { margin: 0.4rem 0; color: var(--ink-soft); }
+.agentconsole__tools { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.72rem; word-break: break-word; }
+.agentconsole__form { display: flex; gap: 0.4rem; margin: 0.4rem 0; }
+.agentconsole__input {
+  flex: 1 1 auto; min-width: 0;
+  font: 400 0.78rem/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  padding: 0.4rem 0.5rem; border: 2px solid var(--ink); border-radius: 8px; background: #fffdf8; color: var(--ink);
+}
+.agentconsole__btn {
+  font: 800 0.78rem/1 'Nunito', system-ui, sans-serif;
+  padding: 0.4rem 0.7rem; border: 2px solid var(--ink); border-radius: 999px; background: var(--accent); color: #fff; cursor: pointer;
+}
+.agentconsole__out {
+  margin: 0; max-height: 160px; overflow: auto; white-space: pre-wrap; word-break: break-word;
+  font: 400 0.72rem/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: #fffdf8; border: 1.5px dashed var(--ink-soft); border-radius: 8px; padding: 0.4rem 0.5rem;
+}
+@media (max-width: 520px) { .agentconsole { left: 8px; bottom: 8px; } }

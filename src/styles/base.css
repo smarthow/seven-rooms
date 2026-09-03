@@ -1,0 +1,468 @@
+/* base.css — reset, paper background, page chrome layout, slide layout,
+   progress bar, agent status chip, Next button. Structure only.
+   Reusable widgets live in components.css. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--paper);
+  /* faint paper grain: two very soft radial dots, no image files */
+  background-image:
+    radial-gradient(rgba(31, 29, 26, 0.045) 1px, transparent 1px),
+    radial-gradient(rgba(31, 29, 26, 0.03) 1px, transparent 1px);
+  background-size: 22px 22px, 13px 13px;
+  background-position: 0 0, 7px 9px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--size-body);
+  font-weight: 400;
+  line-height: 1.55;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 900;
+  line-height: 1.12;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* deck.ts moves focus to the stage on every slide change so keyboard and
+   screen-reader users land on the new slide. The stage is the whole screen,
+   so a ring around it would be noise — real controls keep theirs. */
+.slide:focus,
+.slide:focus-visible {
+  outline: none;
+}
+
+/* ---------------------------------------------------------------- shell */
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* top bar: progress segments + agent status chip */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: 10px clamp(12px, 3vw, 24px);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(3px);
+  border-bottom: var(--border) solid var(--ink);
+}
+
+.brand {
+  font-family: var(--font-hand);
+  font-size: 21px;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* progress bar — 10 segments (intro, 7 rooms, types, ending) */
+.progress {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 4px;
+  min-width: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.progress__seg {
+  flex: 1 1 0;
+  height: 10px;
+  min-width: 6px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  transition: background-color 300ms var(--ease);
+}
+
+.progress__seg--done {
+  background: var(--ink);
+}
+
+.progress__seg--current {
+  background: var(--accent);
+}
+
+/* agent status chip, top right, persistent */
+.agentchip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  max-width: 44vw;
+  padding: 5px 11px;
+  border: var(--border) solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  font-size: var(--size-tiny);
+  line-height: 1.2;
+}
+
+.agentchip__dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--agent);
+}
+
+
+.agentchip--dark {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+
+.agentchip__text {
+  min-width: 0;
+}
+
+.agentchip__mode {
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.agentchip__ticker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.agentchip__ticker--flash {
+  color: var(--accent);
+  animation: chip-flash 700ms var(--ease);
+}
+
+@keyframes chip-flash {
+  0% {
+    transform: translateX(-4px);
+    opacity: 0.2;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------- stage */
+
+.stage {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  padding: clamp(24px, 5vh, 60px) clamp(16px, 4vw, 28px) 120px;
+}
+
+/* ------------------------------------------------- ABOVE THE FOLD (>=768px)
+
+   The rule: on desktop the PAGE never scrolls. The stage is exactly one
+   viewport tall (100dvh minus the top bar) and clips; a slide is a compact
+   header row plus one flexible body row with `min-height: 0`. Panes inside
+   the body scroll internally when they truly must.
+
+   Below 768px this whole block is off and the page scrolls normally.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .shell {
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .topbar {
+    position: static;
+    flex: 0 0 auto;
+  }
+
+  .stage {
+    min-height: 0;
+    align-items: stretch;
+    overflow: hidden;
+    /* bottom padding keeps the body row clear of the fixed Next button */
+    padding: clamp(12px, 2.4vh, 26px) clamp(16px, 4vw, 28px) clamp(64px, 8vh, 78px);
+  }
+
+  .slide {
+    height: 100%;
+    min-height: 0;
+    gap: clamp(9px, 1.5vh, 18px);
+    justify-content: center;
+    /* last-resort safety net: a slide that still overflows scrolls itself,
+       so the content stays reachable and the document stays put. Design so
+       this never triggers at 1280x800. */
+    overflow: hidden auto;
+    scrollbar-width: thin;
+  }
+
+  /* a slide built with fitHeader starts at the top and owns the full width */
+  .slide:has(> .fithead) {
+    justify-content: flex-start;
+    overflow: hidden;
+  }
+
+  .slide:has(> .split) {
+    max-width: min(1160px, 100%);
+  }
+}
+
+.slide {
+  width: 100%;
+  max-width: var(--measure);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap);
+  text-align: center;
+  animation: slide-in 320ms var(--ease) both;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide {
+    animation: none;
+  }
+}
+
+/* left-aligned blocks inside an otherwise centered slide */
+.slide .align-left {
+  text-align: left;
+  align-self: stretch;
+}
+
+.hero {
+  font-size: var(--size-hero);
+}
+
+.title {
+  font-size: var(--size-title);
+}
+
+.lead {
+  font-size: var(--size-lead);
+  max-width: 34ch;
+}
+
+.body {
+  max-width: 56ch;
+}
+
+.hand {
+  font-family: var(--font-hand);
+  font-size: 22px;
+  line-height: 1.25;
+  color: var(--ink-soft);
+}
+
+.eyebrow {
+  font-family: var(--font-hand);
+  font-size: 24px;
+  /* Plain --accent on paper is 3.0:1, and Caveat's small x-height means 24px
+     does not really read as large text. Mixed toward --ink it clears AA. */
+  color: color-mix(in srgb, var(--accent) 82%, var(--ink));
+  line-height: 1;
+}
+
+.muted {
+  color: var(--ink-soft);
+}
+
+.tiny {
+  font-size: var(--size-tiny);
+  color: var(--ink-faint);
+}
+
+.rule {
+  width: 90px;
+  height: 0;
+  border-top: var(--border) solid var(--ink);
+  opacity: 0.4;
+}
+
+/* ------------------------------------------------------------ next button */
+
+.nextbtn {
+  position: fixed;
+  right: clamp(14px, 4vw, 34px);
+  bottom: clamp(14px, 4vw, 34px);
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius-lg);
+  background: var(--accent);
+  color: var(--paper-card);
+  font-weight: 900;
+  font-size: 18px;
+  box-shadow: var(--shadow-sketch-lift);
+  transform: rotate(-0.6deg);
+  transition:
+    transform 160ms var(--ease),
+    opacity 260ms var(--ease);
+}
+
+.nextbtn[hidden] {
+  display: none;
+}
+
+.nextbtn--enter {
+  animation: next-pop 380ms var(--ease) both;
+}
+
+.nextbtn:hover {
+  transform: rotate(-0.6deg) translateY(-2px);
+}
+
+.nextbtn:active {
+  transform: rotate(-0.6deg) translateY(1px);
+  box-shadow: var(--shadow-sketch);
+}
+
+.nextbtn__key {
+  font-family: var(--font-hand);
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+@keyframes next-pop {
+  from {
+    opacity: 0;
+    transform: rotate(-0.6deg) translateY(14px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-0.6deg);
+  }
+}
+
+/* a soft hint of what is still needed before Next appears */
+.waitnote {
+  position: fixed;
+  right: clamp(14px, 4vw, 34px);
+  bottom: clamp(14px, 4vw, 34px);
+  z-index: 29;
+  max-width: 46vw;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  font-family: var(--font-hand);
+  font-size: 19px;
+  color: var(--ink-faint);
+  text-align: right;
+  pointer-events: none;
+}
+
+.waitnote[hidden] {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ 375px */
+
+@media (max-width: 520px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .brand {
+    font-size: 18px;
+  }
+
+  .agentchip {
+    order: 2;
+    max-width: 100%;
+    margin-left: auto;
+  }
+
+  .progress {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .stage {
+    padding: 20px 14px 116px;
+  }
+
+  .waitnote {
+    max-width: 60vw;
+    font-size: 17px;
+  }
+
+  .nextbtn {
+    padding: 11px 18px;
+    font-size: 17px;
+  }
+}

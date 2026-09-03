@@ -1,0 +1,580 @@
+/* rooms/room2-funnels/room.css — scoped to .room-2.
+ *
+ * The engine adds `room-2` to the slide container, so every selector here
+ * starts with `.room-2`. Nothing leaks into another room.
+ *
+ * The sign-up page is deliberately the loudest thing in Seven Rooms: a red
+ * countdown bar, a huge green button, and a link small enough to need squinting.
+ * That is the point of the room.
+ */
+
+.room-2 .funnel {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.room-2 .funnel__frame {
+  position: relative;
+  overflow: hidden;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  transform: rotate(-0.3deg);
+  padding: 0;
+  text-align: center;
+}
+
+/* everything under the countdown bar — the one part that may scroll */
+.room-2 .funnel__scroll {
+  padding: 0 18px 18px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+/* ------------------------------------------------------------- countdown */
+
+.room-2 .funnel__bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 8px 14px;
+  background: var(--danger);
+  color: var(--paper);
+}
+
+.room-2 .funnel__barlabel {
+  font-size: var(--size-tiny);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.room-2 .funnel__clock {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.room-2 .funnel__restart {
+  font-family: var(--font-hand);
+  font-size: 17px;
+  opacity: 0.85;
+}
+
+.room-2 .funnel__restart[hidden] {
+  display: none;
+}
+
+/* ----------------------------------------------------------------- brand */
+
+.room-2 .funnel__brand {
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.room-2 .funnel__tagline {
+  font-size: var(--size-small);
+  color: var(--ink-soft);
+  margin: 4px 0 14px;
+}
+
+/* ----------------------------------------------------------------- plans */
+
+.room-2 .funnel__plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.room-2 .funnel__plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 10px 12px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 200ms var(--ease), box-shadow 200ms var(--ease);
+}
+
+.room-2 .funnel__plan:hover {
+  box-shadow: var(--shadow-sketch);
+}
+
+.room-2 .funnel__plan--on {
+  background: var(--accent-wash);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.room-2 .funnel__badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  white-space: nowrap;
+  padding: 2px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--good);
+  color: var(--paper);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.room-2 .funnel__planname {
+  font-weight: 900;
+  font-size: var(--size-small);
+}
+
+.room-2 .funnel__planprice {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.room-2 .funnel__planblurb {
+  font-size: var(--size-tiny);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------- the upsells */
+
+.room-2 .funnel__addonhead {
+  font-family: var(--font-hand);
+  font-size: 20px;
+  color: var(--accent);
+  text-align: left;
+}
+
+.room-2 .funnel__addons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 6px 0 16px;
+}
+
+.room-2 .funnel__addon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 2px dashed var(--ink-faint);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  text-align: left;
+  cursor: pointer;
+}
+
+.room-2 .funnel__check {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--good);
+  flex: none;
+}
+
+.room-2 .funnel__addonlabel {
+  font-size: var(--size-small);
+  font-weight: 700;
+  flex: 1 1 auto;
+}
+
+.room-2 .funnel__addonprice {
+  font-family: var(--font-mono);
+  font-size: var(--size-tiny);
+  color: var(--ink-faint);
+}
+
+/* ------------------------------------------------------------- the form */
+
+.room-2 .funnel__emaillabel {
+  display: block;
+  font-size: var(--size-tiny);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: left;
+}
+
+.room-2 .funnel__email {
+  width: 100%;
+  margin: 6px 0 14px;
+  padding: 10px 12px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  font: inherit;
+  font-size: var(--size-small);
+  color: inherit;
+}
+
+.room-2 .funnel__yes {
+  display: block;
+  width: 100%;
+  padding: 16px 18px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--good);
+  box-shadow: var(--shadow-sketch);
+  color: #fff;
+  font: inherit;
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 150ms var(--ease);
+}
+
+.room-2 .funnel__yes:hover {
+  transform: translateY(-1px);
+}
+
+.room-2 .funnel__no {
+  display: block;
+  margin: 10px auto 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-faint);
+  font: inherit;
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.room-2 .funnel__shame {
+  margin: 8px 0 0;
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: 1.35;
+  color: var(--danger);
+}
+
+.room-2 .funnel__shame[hidden] {
+  display: none;
+}
+
+/* ------------------------------------------------------- stamp + receipts */
+
+.room-2 .funnel__stamp {
+  position: absolute;
+  top: 54px;
+  right: 10px;
+  padding: 4px 12px;
+  border: var(--border) solid var(--human);
+  border-radius: 999px;
+  background: var(--human-wash);
+  color: var(--human);
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: 1.3;
+  transform: rotate(5deg);
+  animation: room2-stamp 320ms var(--ease) both;
+}
+
+.room-2 .funnel--agent .funnel__stamp {
+  border-color: var(--agent);
+  background: var(--agent-wash);
+  color: var(--agent);
+}
+
+.room-2 .funnel__stamp[hidden] {
+  display: none;
+}
+
+@keyframes room2-stamp {
+  from {
+    opacity: 0;
+    transform: rotate(5deg) scale(1.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(5deg) scale(1);
+  }
+}
+
+/* the agent ignored the clock, so the clock stops shouting */
+.room-2 .funnel--agent .funnel__bar {
+  background: var(--ink-faint);
+}
+
+.room-2 .funnel--agent .funnel__badge {
+  background: var(--ink-faint);
+}
+
+.room-2 .funnel__receipts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.room-2 .funnel__receipt {
+  padding: 10px 14px;
+  border: var(--border) dashed var(--human);
+  border-radius: var(--radius-sm);
+  background: var(--human-wash);
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--size-tiny);
+  color: var(--ink-soft);
+}
+
+.room-2 .funnel__receipt--agent {
+  border-color: var(--agent);
+  background: var(--agent-wash);
+}
+
+.room-2 .funnel__receiptline + .funnel__receiptline {
+  margin-top: 4px;
+}
+
+/* ----------------------------------------------------------- the meters */
+
+.room-2 .funnel__meters {
+  align-self: stretch;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 18px;
+}
+
+/* --------------------------------------------------- the manipulation list */
+
+.room-2 .funnel__list {
+  align-self: stretch;
+  margin: 4px 0 0;
+  padding-left: 22px;
+  text-align: left;
+  font-size: var(--size-small);
+  line-height: 1.55;
+}
+
+.room-2 .funnel__list li + li {
+  margin-top: 6px;
+}
+
+/* ------------------------------------------------- the tools, held back */
+
+.room-2 .funnel__tools {
+  align-self: stretch;
+  transition: opacity 400ms var(--ease);
+}
+
+.room-2 .funnel__tools--waiting {
+  opacity: 0.55;
+}
+
+/* ---------------------------------------------- above the fold (>=768px)
+   Inside a splitPane the sign-up frame becomes the flexible element: the
+   countdown bar stays pinned, only the form body scrolls, and it should not
+   need to. Both meters stay under the form, always visible.
+   -------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .room-2 .split__main > .stack {
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 10px;
+  }
+
+  .room-2 .split__main .funnel {
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 8px;
+  }
+
+  .room-2 .split__main .funnel__frame {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 150px;
+  }
+
+  .room-2 .split__main .funnel__scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0 14px 12px;
+  }
+
+  .room-2 .split__main .funnel__bar {
+    margin-bottom: 10px;
+    padding: 5px 12px;
+  }
+
+  .room-2 .split__main .funnel__clock {
+    font-size: 17px;
+  }
+
+  .room-2 .split__main .funnel__brand {
+    font-size: 18px;
+  }
+
+  /* the tagline is flavour, and the form needs the pixels more */
+  .room-2 .split__main .funnel__tagline {
+    display: none;
+  }
+
+  .room-2 .split__main .funnel__plans {
+    gap: 7px;
+    margin: 8px 0;
+  }
+
+  .room-2 .split__main .funnel__plan {
+    padding: 11px 8px 8px;
+    gap: 2px;
+  }
+
+  .room-2 .split__main .funnel__planprice {
+    font-size: 16px;
+  }
+
+  .room-2 .split__main .funnel__planblurb {
+    font-size: 11px;
+    line-height: 1.35;
+  }
+
+  .room-2 .split__main .funnel__addonhead {
+    font-size: 16px;
+    line-height: 1.1;
+  }
+
+  .room-2 .split__main .funnel__addons {
+    gap: 5px;
+    margin: 4px 0 10px;
+  }
+
+  .room-2 .split__main .funnel__addon {
+    padding: 5px 9px;
+  }
+
+  .room-2 .split__main .funnel__emaillabel {
+    font-size: 10px;
+  }
+
+  .room-2 .split__main .funnel__email {
+    margin: 3px 0 8px;
+    padding: 6px 10px;
+  }
+
+  .room-2 .split__main .funnel__yes {
+    padding: 8px 14px;
+    font-size: 16px;
+  }
+
+  .room-2 .split__main .funnel__no {
+    margin-top: 7px;
+  }
+
+  .room-2 .split__main .funnel__shame {
+    font-size: 16px;
+  }
+
+  .room-2 .split__main .funnel__receipt {
+    padding: 6px 9px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .room-2 .split__main .funnel__receipts {
+    gap: 6px;
+  }
+
+  .room-2 .split__main .funnel__stamp {
+    top: 44px;
+    font-size: 16px;
+  }
+
+  .room-2 .split__main .funnel__meters {
+    flex: 0 0 auto;
+  }
+
+  .room-2 .split__main .meter__label {
+    font-size: 17px;
+  }
+
+  .room-2 .split__main .meter__track {
+    height: 10px;
+  }
+
+  .room-2 .split__main .meter__head {
+    margin-bottom: 3px;
+  }
+
+  /* the side column is a tight stack: tools, one note, the two CTAs, the
+     agent, then the narrator's reactions. Everything shrinks a little so all
+     of it fits before a reaction arrives. */
+  .room-2 .split__side > .stack,
+  .room-2 .split__side .funnel__tools {
+    gap: 9px;
+  }
+
+  .room-2 .split__side .stack:empty {
+    display: none;
+  }
+
+  .room-2 .split__side .toollist {
+    gap: 4px;
+    padding: 8px 10px;
+  }
+
+  .room-2 .split__side .prompthint {
+    padding: 8px 10px;
+  }
+
+  .room-2 .split__side .char svg {
+    width: 54px;
+  }
+
+  .room-2 .split__side .char__name {
+    font-size: 15px;
+  }
+
+  .room-2 .split__side .funnel__list {
+    font-size: var(--size-tiny);
+    padding-left: 18px;
+  }
+}
+
+/* --------------------------------------------------------------- mobile */
+
+@media (max-width: 520px) {
+  .room-2 .funnel__meters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .room-2 .funnel__plans {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .room-2 .funnel__badge {
+    top: -10px;
+    left: 12px;
+    transform: rotate(-2deg);
+  }
+
+  .room-2 .funnel__yes {
+    font-size: 18px;
+  }
+
+  .room-2 .funnel__stamp {
+    top: 48px;
+  }
+}

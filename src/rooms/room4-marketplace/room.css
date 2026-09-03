@@ -1,0 +1,516 @@
+/* rooms/room4-marketplace/room.css — scoped to .room-4.
+ *
+ * The engine adds `room-4` to the slide container, so every selector here
+ * starts with `.room-4`. Nothing leaks into other rooms.
+ */
+
+.room-4 .market {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+/* listings on the left, the seller's agent on the right */
+.room-4 .market__grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: var(--gap-sm);
+  align-items: start;
+}
+
+/* ------------------------------------------------------------- listings */
+
+.room-4 .market__listings {
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  transform: rotate(-0.3deg);
+  padding: 12px 14px 14px;
+  text-align: left;
+}
+
+.room-4 .market__brand {
+  font-family: var(--font-hand);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.room-4 .market__query {
+  font-size: var(--size-tiny);
+  color: var(--ink-faint);
+  margin: 2px 0 10px;
+}
+
+.room-4 .offer {
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  padding: 9px 11px;
+  transition: box-shadow 300ms var(--ease), border-color 300ms var(--ease);
+}
+
+.room-4 .offer + .offer {
+  margin-top: 9px;
+}
+
+.room-4 .offer__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.room-4 .offer__name {
+  font-size: var(--size-small);
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.room-4 .offer__id {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.room-4 .offer__price {
+  font-size: 20px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.room-4 .offer__price--moved {
+  animation: room4-bump 520ms var(--ease) both;
+  color: var(--danger);
+}
+
+@keyframes room4-bump {
+  0% {
+    transform: translateY(6px) scale(1.12);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.room-4 .offer__attrs {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.room-4 .offer__attrs li {
+  font-size: 11px;
+  padding: 2px 7px;
+  border: 1.5px solid var(--ink-faint);
+  border-radius: 999px;
+  color: var(--ink-soft);
+}
+
+/* the seller's agent staples these on */
+.room-4 .offer__note {
+  margin-top: 7px;
+  font-family: var(--font-hand);
+  font-size: 17px;
+  line-height: 1.2;
+  color: var(--danger);
+  transform: rotate(-1.2deg);
+  animation: room4-stamp 300ms var(--ease) both;
+}
+
+.room-4 .offer__note[hidden] {
+  display: none;
+}
+
+.room-4 .offer--baited {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px var(--danger-wash);
+}
+
+@keyframes room4-stamp {
+  from {
+    opacity: 0;
+    transform: rotate(-1.2deg) scale(1.4);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-1.2deg) scale(1);
+  }
+}
+
+/* -------------------------------------------------------- seller's agent */
+
+.room-4 .seller {
+  border: var(--border) solid var(--agent);
+  border-radius: var(--radius);
+  background: var(--agent-wash);
+  box-shadow: var(--shadow-sketch);
+  transform: rotate(0.4deg);
+  padding: 11px 12px 12px;
+  text-align: left;
+  /* darker than your agent's teal: same species, other side of the table */
+  --seller-ink: #10514f;
+}
+
+.room-4 .seller--awake {
+  box-shadow: 0 0 0 3px rgba(16, 81, 79, 0.18), var(--shadow-sketch);
+}
+
+.room-4 .seller__head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-bottom: 8px;
+  border-bottom: 2px dashed var(--seller-ink);
+}
+
+.room-4 .seller__badge {
+  display: block;
+  width: 38px;
+  flex: 0 0 38px;
+  color: var(--seller-ink);
+}
+
+.room-4 .seller__art {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.room-4 .seller__name {
+  font-size: var(--size-small);
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--seller-ink);
+}
+
+.room-4 .seller__sub {
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.room-4 .seller__log {
+  margin-top: 8px;
+  max-height: 176px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.room-4 .seller__line {
+  display: flex;
+  gap: 7px;
+  animation: room4-linein 260ms var(--ease) both;
+}
+
+.room-4 .seller__line + .seller__line {
+  margin-top: 5px;
+}
+
+.room-4 .seller__tag {
+  flex: 0 0 auto;
+  font-family: var(--font-hand);
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--seller-ink);
+}
+
+.room-4 .seller__line--does .seller__tag {
+  color: var(--danger);
+}
+
+@keyframes room4-linein {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ------------------------------------------------------------- readouts */
+
+.room-4 .market__deal--done .stat__value {
+  color: var(--good);
+}
+
+.room-4 .market__deal--gone .stat__value {
+  color: var(--danger);
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
+}
+
+/* the readouts + the human's two buttons, in the side column */
+.room-4 .market__controls {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px 11px;
+  border: 2px dashed var(--ink-faint);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  text-align: left;
+}
+
+.room-4 .market__controls .tiny {
+  margin: -2px 0 0;
+}
+
+/* the "who knew what" receipt after the first call */
+.room-4 .market__receipt {
+  align-self: stretch;
+  padding: 12px 14px;
+  border: var(--border) dashed var(--agent);
+  border-radius: var(--radius-sm);
+  background: var(--agent-wash);
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--size-tiny);
+  color: var(--ink-soft);
+}
+
+.room-4 .market__receiptline + .market__receiptline {
+  margin-top: 4px;
+}
+
+/* ---------------------------------------------------------------- narrow */
+
+@media (max-width: 640px) {
+  .room-4 .market__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .room-4 .seller__log {
+    max-height: 132px;
+  }
+}
+
+/* ---------------------------------------------- above the fold (>=768px)
+   Inside a splitPane the main pane holds the two-column shop: the listings
+   on the left, the seller's agent on the right. The seller's LOG is the one
+   flexible element, so only it scrolls. The side column carries the tools,
+   the CTA, the readouts and the human's two buttons — and must fit whole.
+   -------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .room-4 .split__main .market {
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 6px;
+  }
+
+  .room-4 .split__main .market__grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    grid-template-columns: 1.06fr 1fr;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .room-4 .split__main .market__listings {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 9px 11px 10px;
+  }
+
+  .room-4 .split__main .market__query {
+    margin: 2px 0 7px;
+  }
+
+  .room-4 .split__main .offer {
+    padding: 7px 9px;
+  }
+
+  .room-4 .split__main .offer + .offer {
+    margin-top: 7px;
+  }
+
+  .room-4 .split__main .offer__price {
+    font-size: 18px;
+  }
+
+  .room-4 .split__main .offer__attrs {
+    margin-top: 5px;
+    gap: 4px;
+  }
+
+  /* the seller's panel is a column; its log takes what is left and scrolls */
+  .room-4 .split__main .seller {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 9px 11px 10px;
+  }
+
+  .room-4 .split__main .seller__head {
+    flex: 0 0 auto;
+    padding-bottom: 6px;
+  }
+
+  .room-4 .split__main .seller__badge {
+    width: 32px;
+    flex: 0 0 32px;
+  }
+
+  .room-4 .split__main .seller__log {
+    flex: 1 1 auto;
+    max-height: none;
+    min-height: 0;
+    margin-top: 7px;
+  }
+
+  .room-4 .split__main .market > .tiny {
+    margin: 0;
+  }
+
+  /* this room's side column is the busiest in the building — buy it height
+     back from the header, which only needs one short label line */
+  .room-4 .fithead {
+    gap: 2px;
+  }
+
+  .room-4 .fithead__title {
+    font-size: clamp(24px, 2.3vw, 29px);
+  }
+
+  .room-4 .fithead__lead {
+    font-size: 15px;
+    line-height: 1.3;
+  }
+
+  /* --- the side column: everything visible, nothing scrolled --- */
+
+  .room-4 .split__side {
+    gap: 5px;
+    /* the fixed Next button sits bottom-right; this clears it */
+    padding-bottom: 22px;
+  }
+
+  .room-4 .split__side > .stack {
+    gap: 5px;
+  }
+
+  .room-4 .split__side .toollist {
+    padding: 6px 9px 7px;
+    gap: 3px;
+  }
+
+  .room-4 .split__side .toollist__head {
+    font-size: 15px;
+  }
+
+  .room-4 .split__side .toollist__name {
+    font-size: 13px;
+  }
+
+  .room-4 .split__side .toollist__desc {
+    font-size: 11px;
+    line-height: 1.28;
+  }
+
+  .room-4 .split__side .toollist__item + .toollist__item {
+    padding-top: 4px;
+  }
+
+  .room-4 .split__side .prompthint {
+    padding: 6px 9px;
+    gap: 8px;
+  }
+
+  .room-4 .split__side .prompthint__text {
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .room-4 .split__side .prompthint__copy {
+    padding: 4px 9px;
+    font-size: 11px;
+  }
+
+  .room-4 .split__side .meter {
+    gap: 3px;
+  }
+
+  .room-4 .split__side .meter__label {
+    font-size: 10.5px;
+  }
+
+  .room-4 .split__side .meter__track {
+    height: 10px;
+  }
+
+  .room-4 .split__side .meter__value {
+    font-size: 12px;
+  }
+
+  .room-4 .split__side .btnrow {
+    gap: 8px;
+  }
+
+  .room-4 .split__side .btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  /* the readouts: meter, then the two stats, then the two human buttons */
+  .room-4 .split__side .market__controls {
+    padding: 7px 9px 8px;
+    gap: 5px;
+  }
+
+  .room-4 .split__side .market__controls .meter__label,
+  .room-4 .split__side .market__controls .stat__label {
+    font-size: 10.5px;
+  }
+
+  .room-4 .split__side .market__controls .stat {
+    padding: 3px 7px;
+  }
+
+  .room-4 .split__side .market__controls .stat__value {
+    font-size: 14px;
+  }
+
+  .room-4 .split__side .market__controls .tiny {
+    font-size: 10.5px;
+    line-height: 1.2;
+  }
+
+  .room-4 .split__side .chars {
+    gap: 10px;
+  }
+
+  .room-4 .split__side .char svg {
+    width: 32px;
+  }
+
+  .room-4 .split__side .char__name {
+    font-size: 11px;
+  }
+
+  .room-4 .split__side .thinking {
+    font-size: 14px;
+  }
+
+  .room-4 .split__side .market__receipt {
+    padding: 7px 9px;
+    font-size: 10.5px;
+  }
+
+  .room-4 .split__side .bubble {
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+}

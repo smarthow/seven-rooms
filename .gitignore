@@ -1,0 +1,12 @@
+*.local
+*.log
+npm-debug.log*
+.DS_Store
+.gstack/
+.idea/
+.vscode/
+.wrangler/
+browse-*.json
+coverage
+dist
+node_modules

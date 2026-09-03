@@ -1,0 +1,1240 @@
+/* components.css — every reusable widget produced by src/engine/ui.ts,
+   plus the characters, the vote, the scoreboard and the report card.
+   Rooms should reuse these classes before inventing their own. */
+
+/* ------------------------------------------------------------- characters */
+
+.chars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(18px, 6vw, 54px);
+}
+
+.char {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.char svg {
+  display: block;
+  width: clamp(74px, 18vw, 104px);
+  height: auto;
+  overflow: visible;
+}
+
+.char__name {
+  font-family: var(--font-hand);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.char--human .char__name {
+  color: var(--human);
+}
+
+.char--agent .char__name {
+  color: var(--agent);
+}
+
+.char--dark {
+  opacity: 0.34;
+  filter: grayscale(1);
+  transition:
+    opacity 1200ms var(--ease),
+    filter 1200ms var(--ease);
+}
+
+.char--thinking svg {
+  animation: char-hum 1.5s ease-in-out infinite;
+}
+
+@keyframes char-hum {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* ---------------------------------------------------------------- bubbles */
+
+.bubble {
+  position: relative;
+  align-self: center;
+  max-width: 54ch;
+  padding: 15px 19px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius-lg);
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  text-align: left;
+  animation: slide-in 300ms var(--ease) both;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -11px;
+  left: 30px;
+  width: 14px;
+  height: 14px;
+  background: var(--paper-card);
+  border-right: var(--border) solid var(--ink);
+  border-bottom: var(--border) solid var(--ink);
+  transform: rotate(45deg);
+}
+
+.bubble--narrator {
+  transform: rotate(-0.5deg);
+}
+
+.bubble--human {
+  border-color: var(--human);
+  background: var(--human-wash);
+  transform: rotate(0.6deg);
+}
+
+.bubble--human::after {
+  background: var(--human-wash);
+  border-color: var(--human);
+}
+
+.bubble--agent {
+  border-color: var(--agent);
+  background: var(--agent-wash);
+  transform: rotate(-0.7deg);
+}
+
+.bubble--agent::after {
+  background: var(--agent-wash);
+  border-color: var(--agent);
+}
+
+.bubble__who {
+  display: block;
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: 1;
+  margin-bottom: 5px;
+  color: var(--ink-faint);
+}
+
+.bubble--human .bubble__who {
+  color: var(--human);
+}
+
+.bubble--agent .bubble__who {
+  color: var(--agent);
+}
+
+/* ------------------------------------------------------------------ cards */
+
+.card {
+  align-self: stretch;
+  padding: 18px 20px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  text-align: left;
+  transform: rotate(-0.45deg);
+}
+
+.card:nth-of-type(even) {
+  transform: rotate(0.5deg);
+}
+
+.card__title {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+.card__body {
+  color: var(--ink-soft);
+}
+
+.cardrow {
+  align-self: stretch;
+  display: grid;
+  gap: var(--gap-sm);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* -------------------------------------------------------------- tool card */
+
+.toolcard {
+  align-self: stretch;
+  padding: 16px 18px;
+  border: var(--border) dashed var(--agent);
+  border-radius: var(--radius);
+  background: var(--agent-wash);
+  text-align: left;
+  transform: rotate(0.35deg);
+}
+
+.toolcard__name {
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--agent);
+  word-break: break-word;
+}
+
+.toolcard__desc {
+  margin-top: 5px;
+  color: var(--ink-soft);
+  font-size: var(--size-small);
+}
+
+.toolcard__foot {
+  margin-top: 9px;
+  font-family: var(--font-hand);
+  font-size: 18px;
+  color: var(--agent);
+  line-height: 1;
+}
+
+.toolcard--gone {
+  border-color: var(--ink-faint);
+  background: transparent;
+  opacity: 0.5;
+}
+
+/* ------------------------------------------------------------ prompt hint */
+
+.prompthint {
+  align-self: stretch;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-sm);
+  padding: 14px 16px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-deep);
+  text-align: left;
+}
+
+.prompthint__label {
+  font-family: var(--font-hand);
+  font-size: 18px;
+  color: var(--ink-faint);
+  line-height: 1;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.prompthint__text {
+  flex: 1 1 auto;
+  font-weight: 700;
+}
+
+.prompthint__copy {
+  flex: 0 0 auto;
+  align-self: center;
+  padding: 7px 13px;
+  border: var(--border) solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper-card);
+  font-size: var(--size-tiny);
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.prompthint__copy:hover {
+  background: var(--accent-wash);
+}
+
+/* ----------------------------------------------------------------- meters */
+
+.meter {
+  align-self: stretch;
+}
+
+.meter__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  margin-bottom: 5px;
+}
+
+.meter__label {
+  font-family: var(--font-hand);
+  font-size: 21px;
+  line-height: 1;
+}
+
+.meter__value {
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.meter__track {
+  height: 18px;
+  border: var(--border) solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper-card);
+  overflow: hidden;
+}
+
+.meter__fill {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width var(--t-meter) var(--ease);
+}
+
+.meter--agent .meter__fill {
+  background: var(--agent);
+}
+
+.meter--human .meter__fill {
+  background: var(--human);
+}
+
+.meter--good .meter__fill {
+  background: var(--good);
+}
+
+.meter--danger .meter__fill {
+  background: var(--danger);
+}
+
+/* ---------------------------------------------------------------- counter */
+
+.counter {
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius-sm);
+  background: var(--paper-card);
+  text-align: left;
+}
+
+.stat__label {
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: 1;
+  color: var(--ink-faint);
+}
+
+.stat__value {
+  font-size: 26px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.statrow {
+  align-self: stretch;
+  display: grid;
+  gap: var(--gap-sm);
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+/* ------------------------------------------------------------ two futures */
+
+.futures {
+  align-self: stretch;
+  display: grid;
+  gap: var(--gap-sm);
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 640px) {
+  .futures {
+    grid-template-columns: 1fr;
+  }
+}
+
+.future {
+  padding: 18px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  text-align: left;
+  box-shadow: var(--shadow-sketch);
+}
+
+.future--bad {
+  background: var(--danger-wash);
+  border-color: var(--danger);
+  transform: rotate(-0.7deg);
+}
+
+.future--bright {
+  background: var(--good-wash);
+  border-color: var(--good);
+  transform: rotate(0.7deg);
+}
+
+.future__kicker {
+  font-family: var(--font-hand);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.future--bad .future__kicker {
+  color: var(--danger);
+}
+
+.future--bright .future__kicker {
+  color: var(--good);
+}
+
+.future__title {
+  font-size: 19px;
+  font-weight: 900;
+  margin: 4px 0 8px;
+}
+
+.future__list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: var(--size-small);
+  color: var(--ink-soft);
+}
+
+.future__list li + li {
+  margin-top: 6px;
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  font-weight: 900;
+  box-shadow: var(--shadow-sketch);
+  transition: transform 140ms var(--ease);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn--ghost {
+  background: var(--agent-wash);
+  border-color: var(--agent);
+  color: var(--agent);
+}
+
+.btn--accent {
+  background: var(--accent);
+  border-color: var(--ink);
+  color: var(--paper-card);
+}
+
+.btn__tag {
+  font-family: var(--font-hand);
+  font-size: 15px;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.btnrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+  justify-content: center;
+}
+
+/* ------------------------------------------------------------------- vote */
+
+.vote {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+.vote__option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  text-align: left;
+  font-weight: 700;
+  width: 100%;
+}
+
+.vote__option:hover:not([disabled]) {
+  background: var(--accent-wash);
+}
+
+.vote__option--picked {
+  background: var(--accent-wash);
+  box-shadow: var(--shadow-sketch);
+}
+
+.vote__option[disabled] {
+  cursor: default;
+  opacity: 1;
+}
+
+.vote__text {
+  flex: 1 1 auto;
+}
+
+.vote__bar {
+  position: relative;
+  flex: 0 0 34%;
+  height: 12px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--paper-deep);
+}
+
+.vote__barfill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--ink);
+  transition: width var(--t-meter) var(--ease);
+}
+
+.vote__option--picked .vote__barfill {
+  background: var(--accent);
+}
+
+.vote__pct {
+  flex: 0 0 auto;
+  width: 4.2em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--size-small);
+  color: var(--ink-soft);
+}
+
+.vote__mine {
+  font-family: var(--font-hand);
+  font-size: 19px;
+  color: var(--accent);
+}
+
+@media (max-width: 520px) {
+  .vote__bar {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------- ending scoreboard */
+
+.score {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.score__row {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 14px;
+  padding: 14px 16px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  text-align: left;
+}
+
+.score__num {
+  font-family: var(--font-hand);
+  font-size: 30px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.score__type {
+  font-weight: 900;
+}
+
+.score__pred {
+  font-size: var(--size-small);
+  color: var(--ink-soft);
+  margin: 2px 0 8px;
+}
+
+.score__votes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  font-size: var(--size-tiny);
+  background: var(--paper-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.pill--mine {
+  background: var(--accent-wash);
+  border-color: var(--accent);
+  font-weight: 900;
+}
+
+.pill--agent {
+  background: var(--agent-wash);
+  border-color: var(--agent);
+}
+
+.pill--human {
+  background: var(--human-wash);
+  border-color: var(--human);
+}
+
+/* ------------------------------------------------------------ report card */
+
+.report {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  text-align: left;
+}
+
+.report__room {
+  padding: 14px 16px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+}
+
+.report__roomtitle {
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.report__call {
+  font-family: var(--font-mono);
+  font-size: var(--size-tiny);
+  padding: 6px 0;
+  border-top: 1.5px dashed var(--ink-faint);
+  word-break: break-word;
+}
+
+.report__empty {
+  font-family: var(--font-hand);
+  font-size: 19px;
+  color: var(--ink-faint);
+}
+
+.report__src {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 900;
+  border: 1.5px solid currentColor;
+}
+
+.report__src--webmcp {
+  color: var(--agent);
+}
+
+.report__src--ghost {
+  color: var(--ink-faint);
+}
+
+/* -------------------------------------------------------- misc utilities */
+
+.stack {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.center {
+  text-align: center;
+}
+
+.thinking {
+  font-family: var(--font-mono);
+  font-size: var(--size-small);
+  color: var(--agent);
+}
+
+.thinking::after {
+  content: '';
+  animation: dots 1.2s steps(4, end) infinite;
+}
+
+/* no text, no dots — an empty thinking line must be silent */
+.thinking:empty::after {
+  content: none;
+  animation: none;
+}
+
+@keyframes dots {
+  0% {
+    content: '';
+  }
+  25% {
+    content: '.';
+  }
+  50% {
+    content: '..';
+  }
+  75% {
+    content: '...';
+  }
+}
+
+/* --------------------------------------------------------------- illos
+
+   Height-driven so an illustration can never push a slide below the fold:
+   the box has a definite height, the SVG matches it and takes whatever width
+   its own aspect ratio asks for (the shared slots are 16:10, the `types`
+   glyphs are 1:1 — both work).
+   ---------------------------------------------------------------------- */
+
+.illo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  flex: 0 0 auto;
+  width: 100%;
+  height: clamp(84px, 15vh, 132px);
+}
+
+.illo svg {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.illo--sm {
+  height: clamp(52px, 8.5vh, 76px);
+}
+
+.illo--md {
+  height: clamp(84px, 15vh, 132px);
+}
+
+.illo--lg {
+  height: clamp(112px, 24vh, 200px);
+}
+
+/* an unfilled slot renders nothing at all */
+.illo--empty,
+.illo[hidden] {
+  display: none !important;
+}
+
+/* ==================================================================== */
+/* ABOVE-THE-FOLD LAYOUT — fitHeader / fitBody / splitPane / toollist     */
+/* ==================================================================== */
+
+/* --------------------------------------------------------- fitHeader */
+
+.fithead {
+  align-self: stretch;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.fithead .eyebrow {
+  font-size: 21px;
+}
+
+.fithead__title {
+  font-size: clamp(26px, 3.1vw, 34px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0;
+  max-width: 30ch;
+}
+
+.fithead__lead {
+  font-size: clamp(16px, 1.6vw, 18px);
+  color: var(--ink-soft);
+  line-height: 1.4;
+  max-width: 62ch;
+}
+
+/* ----------------------------------------------------------- fitBody */
+
+.fitbody {
+  align-self: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(9px, 1.5vh, 16px);
+  width: 100%;
+}
+
+.fitbody--scroll {
+  justify-content: flex-start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+  scrollbar-width: thin;
+}
+
+/* a scrolling pane inside a slide should look like a pane, not like a bug */
+@media (min-width: 768px) {
+  .fitbody--scroll {
+    border-top: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
+    padding: 12px 8px 12px 0;
+  }
+}
+
+/* --------------------------------------------------------- splitPane */
+
+.split {
+  align-self: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: var(--split-main, 58fr) var(--split-side, 42fr);
+  gap: clamp(14px, 1.8vw, 24px);
+  width: 100%;
+  text-align: left;
+}
+
+.split__main,
+.split__side {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+.split__side {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding-right: 2px;
+  /* the side column reaches the bottom-right corner, where the fixed Next
+     button lives — leave it room so a narrator bubble is never hidden */
+  padding-bottom: 40px;
+}
+
+.split__main > .stack,
+.split__side > .stack {
+  gap: var(--gap-xs);
+}
+
+/* the side column is a narrow measure — shrink the borrowed widgets a little */
+.split__side .bubble {
+  max-width: 100%;
+  padding: 11px 14px;
+  font-size: var(--size-small);
+}
+
+.split__side .prompthint {
+  padding: 10px 12px;
+  gap: 10px;
+}
+
+.split__side .prompthint__text {
+  font-size: var(--size-small);
+}
+
+.split__side .btn {
+  padding: 9px 15px;
+  font-size: var(--size-small);
+}
+
+.split__side .chars {
+  gap: 18px;
+}
+
+.split__side .char svg {
+  width: clamp(52px, 7vw, 68px);
+}
+
+.split__side .card {
+  padding: 12px 14px;
+}
+
+/* below 768px it stacks, and the page is allowed to scroll */
+@media (max-width: 767.98px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+
+  .split__side {
+    overflow: visible;
+  }
+}
+
+/* -------------------------------------------------- compactToolCards */
+
+.toollist {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 2px dashed var(--agent);
+  border-radius: var(--radius);
+  background: var(--agent-wash);
+  text-align: left;
+}
+
+.toollist__head {
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: 1;
+  color: var(--agent);
+}
+
+.toollist__item + .toollist__item {
+  border-top: 1.5px dashed color-mix(in srgb, var(--agent) 50%, transparent);
+  padding-top: 6px;
+}
+
+.toollist__name {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--agent);
+  word-break: break-word;
+}
+
+.toollist__desc {
+  font-size: var(--size-tiny);
+  line-height: 1.35;
+  color: var(--ink-soft);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------- restart */
+.restart {
+  font: 700 0.8rem/1 'Nunito', system-ui, sans-serif;
+  color: var(--ink);
+  background: transparent;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 150ms, transform 150ms;
+  white-space: nowrap;
+}
+.restart:hover, .restart:focus-visible { opacity: 1; transform: rotate(-1deg); }
+@media (max-width: 520px) { .restart { font-size: 0.7rem; padding: 0.3rem 0.55rem; } }
+
+/* ==================================================================== */
+/* ABOVE THE FOLD — tightened variants of the shared widgets            */
+/* ==================================================================== */
+
+@media (min-width: 768px) {
+  /* twoFutures must fit one screen: 3 bullets a side, ~16 words each. */
+  .futures {
+    flex: 0 1 auto;
+    min-height: 0;
+    gap: clamp(12px, 1.6vw, 20px);
+  }
+
+  .future {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: clamp(12px, 1.8vh, 18px) clamp(14px, 1.4vw, 18px);
+    min-height: 0;
+  }
+
+  .future__kicker {
+    font-size: 19px;
+  }
+
+  .future__title {
+    font-size: clamp(16px, 1.5vw, 18px);
+    margin: 2px 0 6px;
+  }
+
+  .future__list {
+    font-size: clamp(13px, 1.15vw, 15px);
+    line-height: 1.42;
+    padding-left: 18px;
+  }
+
+  .future__list li + li {
+    margin-top: 5px;
+  }
+
+  /* the vote fits under a compact header without a scrollbar */
+  .vote {
+    gap: 6px;
+  }
+
+  .vote__option {
+    padding: 9px 13px;
+  }
+
+  /* the report card is the one legitimate long list — it lives in a
+     .fitbody--scroll pane, so keep its rows tight */
+  .fitbody--scroll .report {
+    gap: 10px;
+  }
+
+  .fitbody--scroll .report__room {
+    padding: 10px 13px;
+  }
+
+  .fitbody--scroll .score__row {
+    padding: 10px 13px;
+  }
+
+  .fitbody--scroll .card,
+  .fitbody--scroll .bubble {
+    padding: 12px 15px;
+  }
+}
+
+/* Under prefers-reduced-motion nothing about the layout may move. */
+@media (prefers-reduced-motion: reduce) {
+  .bubble,
+  .fitbody,
+  .split,
+  .split__main,
+  .split__side,
+  .illo,
+  .toollist {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* the report card's headline row: illo + stat tiles side by side */
+.report__head {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  width: 100%;
+}
+
+.report__head .statrow {
+  flex: 1 1 auto;
+}
+
+.report__head .illo {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+@media (min-width: 768px) {
+  /* the scoreboard's seven rows fit one screen as seven single lines:
+     number | site type | prediction | vote pills */
+  .slide:has(> .fitbody > .score) {
+    max-width: min(1100px, 100%);
+  }
+
+  .score {
+    gap: 7px;
+    align-content: start;
+  }
+
+  .score__row {
+    grid-template-columns: 24px 1fr;
+    gap: 10px;
+    padding: 7px 12px;
+    align-items: center;
+  }
+
+  .score__row > div:last-child {
+    display: grid;
+    grid-template-columns: 128px 1fr auto;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .score__num {
+    font-size: 23px;
+  }
+
+  .score__type {
+    font-size: var(--size-small);
+  }
+
+  .score__pred {
+    font-size: var(--size-tiny);
+    margin: 0;
+  }
+
+  .score__votes {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+
+  .score .pill {
+    padding: 2px 8px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Inside an above-the-fold body row every borrowed widget runs one size
+   smaller. This is what buys a text-heavy slide its screen back.
+   ------------------------------------------------------------------ */
+
+@media (min-width: 768px) {
+  .fitbody .hero {
+    font-size: clamp(26px, 4.2vw, 40px);
+  }
+
+  .fitbody .lead {
+    font-size: clamp(17px, 2vw, 21px);
+  }
+
+  .fitbody .body {
+    font-size: clamp(15px, 1.4vw, 17px);
+  }
+
+  .fitbody .hand {
+    font-size: 20px;
+  }
+
+  .fitbody .eyebrow {
+    font-size: 21px;
+  }
+
+  .fitbody .card {
+    padding: 13px 16px;
+  }
+
+  .fitbody .card__title {
+    font-size: 18px;
+  }
+
+  .fitbody .card__body {
+    font-size: var(--size-small);
+  }
+
+  .fitbody .bubble {
+    padding: 12px 16px;
+    font-size: var(--size-small);
+  }
+
+  .fitbody .chars {
+    gap: clamp(14px, 4vw, 40px);
+  }
+
+  .fitbody .char svg {
+    width: clamp(58px, 11vw, 82px);
+  }
+
+  .fitbody .char__name {
+    font-size: 17px;
+  }
+
+  .fitbody .stat {
+    padding: 8px 12px;
+  }
+
+  .fitbody .stat__value {
+    font-size: 22px;
+  }
+
+  .fitbody .stat__label {
+    font-size: 16px;
+  }
+
+  .fitbody .rule {
+    width: 70px;
+  }
+}
+
+.pill--empty {
+  border-style: dashed;
+  border-color: var(--ink-faint);
+  color: var(--ink-faint);
+  background: transparent;
+}
+
+/* Between 768 and 1000px the scoreboard's one-line rows are too cramped to
+   stay on one line, so its body row scrolls internally instead. The page
+   still does not scroll. */
+@media (min-width: 768px) and (max-width: 999.98px) {
+  .score__row > div:last-child {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .score__votes {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .slide:has(> .fitbody > .score) > .fitbody {
+    justify-content: flex-start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+}
+
+/* prediction reveal: blind buttons before the vote, tally + our bet after */
+.vote__option--blind { justify-content: center; padding-block: 0.8rem; }
+.vote__option--blind .vote__text { flex: 0 1 auto; text-align: center; font-weight: 800; }
+.vote__bet {
+  font: 700 0.8rem/1 'Caveat', cursive; color: var(--accent);
+  border: 1.5px solid var(--accent); border-radius: 999px; padding: 0.15rem 0.5rem; white-space: nowrap;
+}
+.vote__ours { border-color: var(--accent); }
+.vote__ours .card__eyebrow { font: 700 0.95rem/1 'Caveat', cursive; color: var(--accent); margin-bottom: 0.25rem; }
+.vote__ours--in { animation: vote-ours-in 420ms ease-out both; }
+@keyframes vote-ours-in { from { opacity: 0; transform: translateY(8px) rotate(-0.5deg); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .vote__ours--in { animation: none; } }

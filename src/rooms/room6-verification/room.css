@@ -1,0 +1,336 @@
+/* rooms/room6-verification/room.css — scoped to .room-6.
+ *
+ * The consent form is the only ornament in this room. It is drawn to look like
+ * a real one: tighter type, cooler paper, a form footer with a checkbox.
+ */
+
+.room-6 .tos {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.room-6 .tos__frame {
+  position: relative;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  transform: rotate(0.3deg);
+  overflow: hidden;
+  text-align: left;
+}
+
+.room-6 .tos__head {
+  padding: 14px 18px 10px;
+  border-bottom: 2px dashed var(--ink-faint);
+  background: var(--paper-deep);
+}
+
+.room-6 .tos__brand {
+  font-family: var(--font-hand);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.room-6 .tos__title {
+  font-size: 20px;
+  font-weight: 900;
+  margin-top: 4px;
+}
+
+.room-6 .tos__sub {
+  font-size: var(--size-tiny);
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+/* the scrollable clause list — short, so 40 seconds really is enough */
+.room-6 .tos__scroll {
+  height: 210px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 14px 18px 16px;
+}
+
+.room-6 .tos__clause {
+  display: flex;
+  gap: 8px;
+  font-size: var(--size-small);
+  line-height: 1.55;
+  padding: 6px 8px;
+  margin: 0 -8px;
+  border-radius: var(--radius-sm);
+}
+
+.room-6 .tos__ref {
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+/* §4, once the reveal points at it */
+.room-6 .tos__clause--trap {
+  background: var(--danger-wash);
+  box-shadow: inset 0 0 0 2px var(--danger);
+  animation: room6-trap 420ms var(--ease) both;
+}
+
+.room-6 .tos__clause--trap .tos__ref,
+.room-6 .tos__clause--trap .tos__text {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+@keyframes room6-trap {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* the consent footer */
+.room-6 .tos__consent {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-xs);
+  padding: 12px 18px 14px;
+  border-top: var(--border) solid var(--ink);
+  background: var(--paper-deep);
+}
+
+.room-6 .tos__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--size-small);
+  cursor: pointer;
+}
+
+.room-6 .tos__checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--agent);
+  cursor: pointer;
+}
+
+.room-6 .tos__agree {
+  font-family: var(--font-body);
+  font-size: var(--size-small);
+  font-weight: 900;
+  padding: 8px 20px;
+  border: var(--border) solid var(--ink);
+  border-radius: 999px;
+  background: var(--good);
+  color: #fffdf7;
+  cursor: pointer;
+  transition: transform 120ms var(--ease);
+}
+
+.room-6 .tos__agree:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.room-6 .tos__agree:disabled {
+  background: var(--paper-card);
+  color: var(--ink-faint);
+  border-color: var(--ink-faint);
+  cursor: not-allowed;
+}
+
+/* the stamp — one line, applied once, quiet */
+.room-6 .tos__stamp {
+  padding: 10px 18px 12px;
+  border-top: 2px dashed var(--ink-faint);
+  font-family: var(--font-mono);
+  font-size: var(--size-tiny);
+  letter-spacing: 0.04em;
+  animation: room6-stamp 300ms var(--ease) both;
+}
+
+.room-6 .tos__stamp[hidden] {
+  display: none;
+}
+
+.room-6 .tos--accepted .tos__stamp {
+  background: var(--danger-wash);
+  color: var(--danger);
+}
+
+.room-6 .tos--declined .tos__stamp {
+  background: var(--good-wash);
+  color: var(--good);
+}
+
+@keyframes room6-stamp {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.room-6 .tos--accepted .tos__scroll,
+.room-6 .tos--declined .tos__scroll {
+  opacity: 0.75;
+}
+
+@media (max-width: 520px) {
+  .room-6 .tos__scroll {
+    height: 190px;
+  }
+
+  .room-6 .tos__consent {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .room-6 .tos__agree {
+    width: 100%;
+  }
+}
+
+/* ---------------------------------------------- the reveal's big question */
+
+.room-6 .room6-narrate {
+  align-self: stretch;
+}
+
+.room-6 .room6-bigq {
+  font-family: var(--font-hand);
+  font-size: 28px;
+  line-height: 1.15;
+  color: var(--accent);
+  margin: 0;
+}
+
+/* ---------------------------------------------- above the fold (>=768px)
+   Inside a splitPane the terms frame becomes the flexible element: the head,
+   the consent row and the stamp keep their height, and only the clause list
+   gives ground. The six clauses are short enough to fit at 1366x768 without
+   scrolling — a human must be able to read §4 without touching the box.
+   -------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .room-6 .split__main .tos {
+    flex: 1 1 auto;
+    min-height: 0;
+    /* the frame is tilted, so it paints ~2px taller than its layout box —
+       absorb that here or the slide reports a 2px overflow */
+    padding-bottom: 4px;
+  }
+
+  .room-6 .split__main .tos__frame {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .room-6 .split__main .tos__head {
+    padding: 10px 16px 8px;
+  }
+
+  .room-6 .split__main .tos__title {
+    font-size: 18px;
+    margin-top: 2px;
+  }
+
+  .room-6 .split__main .tos__scroll {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+    padding: 10px 16px 12px;
+  }
+
+  .room-6 .split__main .tos__clause {
+    line-height: 1.45;
+    padding: 4px 8px;
+  }
+
+  .room-6 .split__main .tos__consent {
+    padding: 9px 16px 10px;
+  }
+
+  .room-6 .split__main .tos__agree {
+    padding: 6px 16px;
+  }
+
+  .room-6 .split__main .tos__stamp {
+    padding: 8px 16px 9px;
+  }
+
+  /* the side column is narrow — keep the reveal from ever needing a scrollbar */
+  .room-6 .split__side > .stack {
+    gap: 8px;
+  }
+
+  .room-6 .split__side .toollist {
+    padding: 8px 11px;
+    gap: 4px;
+  }
+
+  .room-6 .split__side .toollist__head {
+    font-size: 16px;
+  }
+
+  .room-6 .split__side .toollist__item + .toollist__item {
+    padding-top: 4px;
+  }
+
+  /* one line of description each — the tight list the guide describes */
+  .room-6 .split__side .toollist__desc {
+    font-size: 12.5px;
+    line-height: 1.3;
+    -webkit-line-clamp: 1;
+  }
+
+  .room-6 .split__side .prompthint {
+    padding: 8px 11px;
+  }
+
+  .room-6 .split__side .prompthint__text {
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  /* the ghost's thought is one quiet line — it must not push the column */
+  .room-6 .split__side .thinking {
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .room-6 .split__side .chars {
+    gap: 12px;
+  }
+
+  .room-6 .split__side .char svg {
+    width: clamp(40px, 3.6vw, 48px);
+  }
+
+  /* Once the reveal starts the agent's part is over: the character shrinks so
+     the narration — and the big question — own the bottom of the column. */
+  .room-6 .room6-agentbox--quiet .char svg {
+    width: 38px;
+  }
+
+  .room-6 .room6-agentbox--quiet .char__name {
+    display: none;
+  }
+
+  .room-6 .room6-agentbox--quiet .thinking {
+    display: none;
+  }
+
+  .room-6 .room6-bigq {
+    font-size: 24px;
+  }
+}

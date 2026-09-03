@@ -1,0 +1,625 @@
+/* rooms/room7-coordination/room.css — scoped to .room-7.
+ *
+ * The engine adds `room-7` to the slide container, so every selector here
+ * starts with `.room-7`. Nothing leaks into another room.
+ */
+
+.room-7 .propvote {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+/* The slide is itself a flex column, so nothing in here may be shrunk. */
+.room-7 .propvote > * {
+  flex: 0 0 auto;
+}
+
+/* ------------------------------------------------------------ proposal */
+
+.room-7 .prop__proposal {
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  transform: rotate(-0.4deg);
+  padding: 10px 16px 12px;
+  text-align: left;
+}
+
+.room-7 .prop__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.room-7 .prop__kicker {
+  font-family: var(--font-hand);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.room-7 .prop__title {
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.15;
+  margin: 4px 0 3px;
+}
+
+.room-7 .prop__body {
+  font-size: var(--size-tiny);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.room-7 .prop__meta {
+  font-size: var(--size-tiny);
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------- tally bar */
+
+.room-7 .prop__bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.room-7 .prop__track {
+  display: flex;
+  height: 26px;
+  border: var(--border) solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper-deep);
+  overflow: hidden;
+}
+
+.room-7 .prop__fill {
+  height: 100%;
+  transition: width var(--t-meter) var(--ease);
+}
+
+.room-7 .prop__fill--for {
+  background: var(--good);
+}
+
+.room-7 .prop__fill--against {
+  background: var(--danger);
+}
+
+.room-7 .prop__barlabels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-hand);
+  font-size: 19px;
+  line-height: 1;
+}
+
+.room-7 .prop__barlabels .prop__barlabel:first-child {
+  color: var(--good);
+}
+
+.room-7 .prop__barlabels .prop__barlabel:last-child {
+  color: var(--danger);
+}
+
+/* result label and the scope line share one row, so the bar stays compact */
+.room-7 .prop__resultrow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.room-7 .prop__result {
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+}
+
+.room-7 .prop__result--for {
+  color: var(--good);
+}
+
+.room-7 .prop__result--against {
+  color: var(--danger);
+}
+
+.room-7 .prop__result--flip {
+  animation: room7-flip 900ms var(--ease) both;
+}
+
+@keyframes room7-flip {
+  0% {
+    transform: scale(1);
+    background: transparent;
+  }
+  18% {
+    transform: scale(1.09) rotate(-1.2deg);
+    background: var(--accent-wash);
+  }
+  100% {
+    transform: scale(1);
+    background: transparent;
+  }
+}
+
+.room-7 .prop__scope {
+  font-size: var(--size-tiny);
+  color: var(--ink-faint);
+}
+
+/* ------------------------------------------------------------- switch */
+
+.room-7 .prop__switch {
+  border: var(--border) dashed var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--accent-wash);
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.room-7 .prop__switch[hidden] {
+  display: none;
+}
+
+.room-7 .prop__switch--in {
+  animation: room7-slide-in 320ms var(--ease) both;
+}
+
+@keyframes room7-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.room-7 .prop__switchlabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  font-size: var(--size-small);
+  cursor: pointer;
+}
+
+.room-7 .prop__switchbox {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.room-7 .prop__switchnote {
+  margin-top: 4px;
+  font-size: var(--size-tiny);
+  color: var(--ink-soft);
+}
+
+/* -------------------------------------------------------- human's cast */
+
+.room-7 .prop__cast-box {
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  transform: rotate(0.3deg);
+  padding: 12px 14px 14px;
+  text-align: left;
+}
+
+.room-7 .prop__castlabel {
+  flex: 0 0 auto;
+  font-family: var(--font-hand);
+  font-size: 21px;
+  line-height: 1;
+  color: var(--human);
+}
+
+.room-7 .prop__castrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.room-7 .prop__cast {
+  flex: 1;
+  font-family: inherit;
+  font-size: var(--size-small);
+  font-weight: 900;
+  padding: 9px 12px;
+  border: var(--border) solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 120ms var(--ease), background 200ms var(--ease);
+}
+
+.room-7 .prop__cast:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.room-7 .prop__cast--for:hover:not(:disabled) {
+  background: var(--good-wash);
+}
+
+.room-7 .prop__cast--against:hover:not(:disabled) {
+  background: var(--danger-wash);
+}
+
+.room-7 .prop__cast:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.room-7 .prop__cast--picked {
+  opacity: 1;
+  background: var(--human-wash);
+  border-color: var(--human);
+  color: var(--human);
+}
+
+.room-7 .prop__input {
+  width: 100%;
+  margin-top: 10px;
+  font-family: inherit;
+  font-size: var(--size-small);
+  padding: 8px 10px;
+  border: 2px solid var(--ink-faint);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.room-7 .prop__input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.room-7 .prop__castnote {
+  margin-top: 8px;
+  font-size: var(--size-tiny);
+  color: var(--ink-faint);
+}
+
+/* ------------------------------------------------------- the positions */
+
+.room-7 .prop__list {
+  height: 280px;
+  min-height: 280px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.room-7 .prop__row {
+  padding: 8px 4px;
+  border-bottom: 1px dashed var(--ink-faint);
+}
+
+.room-7 .prop__row:last-child {
+  border-bottom: none;
+}
+
+.room-7 .prop__row--mine {
+  background: var(--accent-wash);
+  border-radius: var(--radius-sm);
+  padding: 8px 8px;
+  margin-bottom: 4px;
+  border-bottom: none;
+  animation: room7-slide-in 320ms var(--ease) both;
+}
+
+.room-7 .prop__row--muted {
+  opacity: 0.28;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.room-7 .prop__rowtop {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.room-7 .prop__badge {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+}
+
+.room-7 .prop__badge--human {
+  background: var(--human-wash);
+  border-color: var(--human);
+  color: var(--human);
+}
+
+.room-7 .prop__badge--agent {
+  background: var(--agent-wash);
+  border-color: var(--agent);
+  color: var(--agent);
+}
+
+/* mixed = a person and their agent, so the badge is literally both */
+.room-7 .prop__badge--mixed {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--human-wash) 0 5px,
+    var(--agent-wash) 5px 10px
+  );
+}
+
+.room-7 .prop__stance {
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.room-7 .prop__stance--for {
+  color: var(--good);
+}
+
+.room-7 .prop__stance--against {
+  color: var(--danger);
+}
+
+.room-7 .prop__mine {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--paper);
+}
+
+.room-7 .prop__when {
+  margin-left: auto;
+  font-size: var(--size-tiny);
+  color: var(--ink-faint);
+}
+
+.room-7 .prop__reason {
+  font-size: var(--size-small);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 520px) {
+  .room-7 .prop__list {
+    height: 240px;
+    min-height: 240px;
+  }
+
+  .room-7 .prop__castrow {
+    flex-direction: column;
+  }
+
+  .room-7 .prop__when {
+    margin-left: 0;
+  }
+}
+
+/* ---------------------------------------------- above the fold (>=768px)
+   Inside the splitPane the list of positions becomes the flexible element:
+   it takes whatever height the main column has left, and it is the ONE
+   element in this room that scrolls internally. Everything above it — the
+   proposal, the tally bar, the result label, the switch — stays put.
+   -------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .room-7 .split__main .propvote {
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 8px;
+  }
+
+  /* the one intended internal scroller */
+  .room-7 .split__main .prop__list {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 96px;
+    padding: 6px 9px;
+  }
+
+  /* about six positions visible at a glance, so the list reads as a list */
+  .room-7 .split__main .prop__row {
+    padding: 3px 3px;
+  }
+
+  .room-7 .split__main .prop__row--mine {
+    padding: 3px 7px;
+    margin-bottom: 2px;
+  }
+
+  .room-7 .split__main .prop__rowtop {
+    gap: 6px;
+    margin-bottom: 0;
+  }
+
+  .room-7 .split__main .prop__badge {
+    font-size: 9.5px;
+    padding: 0 6px;
+    border-width: 1.5px;
+  }
+
+  .room-7 .split__main .prop__stance {
+    font-size: 15px;
+  }
+
+  .room-7 .split__main .prop__mine {
+    font-size: 9.5px;
+    padding: 0 6px;
+  }
+
+  /* one line per reason, so about six positions are visible at a glance */
+  .room-7 .split__main .prop__reason {
+    font-size: 12.5px;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .room-7 .split__main .prop__track {
+    height: 20px;
+  }
+
+  .room-7 .split__main .prop__barlabels {
+    font-size: 17px;
+  }
+
+  .room-7 .split__main .prop__switch {
+    padding: 7px 12px;
+  }
+
+  /* the human's cast lives in the narrow side column — tighten it */
+  .room-7 .split__side .prop__cast-box {
+    padding: 9px 12px 10px;
+  }
+
+  .room-7 .split__side .prop__castlabel {
+    font-size: 18px;
+  }
+
+  .room-7 .split__side .prop__cast {
+    padding: 4px 10px;
+    font-size: var(--size-tiny);
+  }
+
+  .room-7 .split__side .prop__input {
+    margin-top: 5px;
+    padding: 4px 9px;
+    font-size: var(--size-tiny);
+  }
+
+  .room-7 .split__side .prop__castnote {
+    margin-top: 4px;
+  }
+
+  .room-7 .split__side .thinking {
+    font-size: var(--size-tiny);
+  }
+
+  /* This room has more to fit in the side column than any other: two tools,
+     both CTAs, the human's own ballot, the agent and the narrator. Everything
+     borrowed from the shared kit gets one size smaller. */
+  .room-7 .split__side {
+    /* the fixed Next button sits bottom-right; the narrator bubble stops
+       above it, so this room needs less clearance than the shared default */
+    padding-bottom: 28px;
+  }
+
+  /* every stack in this column, including the narrator's reaction box */
+  .room-7 .split__side .stack {
+    gap: 5px;
+  }
+
+  .room-7 .split__side .toollist {
+    padding: 6px 10px;
+    gap: 3px;
+  }
+
+  .room-7 .split__side .toollist__head {
+    font-size: 15px;
+  }
+
+  .room-7 .split__side .toollist__item + .toollist__item {
+    padding-top: 3px;
+  }
+
+  .room-7 .split__side .toollist__name {
+    font-size: 12.5px;
+    line-height: 1.25;
+  }
+
+  /* one line of description each — the full text is on the tool itself */
+  .room-7 .split__side .toollist__desc {
+    -webkit-line-clamp: 1;
+    line-height: 1.3;
+  }
+
+  .room-7 .split__side .prompthint {
+    padding: 6px 10px;
+    gap: 8px;
+  }
+
+  .room-7 .split__side .prompthint__text {
+    font-size: var(--size-tiny);
+    gap: 0;
+  }
+
+  .room-7 .split__side .prompthint__label {
+    font-size: 14px;
+    line-height: 1;
+    margin-bottom: 1px;
+  }
+
+  .room-7 .split__side .prompthint__copy {
+    padding: 3px 9px;
+  }
+
+  .room-7 .split__side .btn {
+    padding: 6px 13px;
+    font-size: var(--size-tiny);
+  }
+
+  .room-7 .split__side .btnrow {
+    justify-content: flex-start;
+  }
+
+  .room-7 .split__side .char {
+    gap: 1px;
+  }
+
+  .room-7 .split__side .char svg {
+    width: 30px;
+  }
+
+  .room-7 .split__side .char__name {
+    font-size: 13px;
+    line-height: 1.1;
+  }
+
+  .room-7 .split__side .bubble {
+    padding: 7px 10px;
+    font-size: var(--size-tiny);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-7 .prop__row--mine,
+  .room-7 .prop__switch--in,
+  .room-7 .prop__result--flip {
+    animation: none !important;
+  }
+
+  .room-7 .prop__fill {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,67 @@
+/* tokens.css — the whole palette and scale of Seven Rooms lives here.
+   Colors are fixed by SPEC §2. Nothing else in the project hard-codes a hex. */
+
+:root {
+  /* --- palette (SPEC §2) --- */
+  --paper: #f6f1e7;
+  --ink: #1f1d1a;
+  --accent: #e8632b; /* orange */
+  --agent: #1f8a8a; /* teal */
+  --human: #d95f5f; /* coral */
+  --danger: #b3261e;
+  --good: #2e7d4f;
+
+  /* --- derived surfaces (mixed from the palette, never new hues) --- */
+  --paper-deep: #efe7d8;
+  --paper-card: #fffdf7;
+  --ink-soft: #55504a;
+  /* 4.7:1 on --paper. The old #8d867d was 3.2:1, and --ink-faint carries the
+     13px .tiny disclaimers — the lines that matter most to read. */
+  --ink-faint: #6f6a62;
+  --rule: #1f1d1a;
+
+  --accent-wash: rgba(232, 99, 43, 0.12);
+  --agent-wash: rgba(31, 138, 138, 0.12);
+  --human-wash: rgba(217, 95, 95, 0.12);
+  --danger-wash: rgba(179, 38, 30, 0.1);
+  --good-wash: rgba(46, 125, 79, 0.1);
+
+  /* --- type --- */
+  --font-body: 'Nunito', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-hand: 'Caveat', 'Nunito', cursive;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  --size-hero: clamp(30px, 6.4vw, 52px);
+  --size-title: clamp(24px, 4.4vw, 40px);
+  --size-lead: clamp(19px, 2.4vw, 24px);
+  --size-body: clamp(17px, 1.8vw, 19px);
+  --size-small: 15px;
+  --size-tiny: 13px;
+
+  /* --- structure --- */
+  --measure: 760px;
+  --border: 2.5px;
+  --radius: 14px;
+  --radius-lg: 18px;
+  --radius-sm: 10px;
+
+  --gap-xs: 8px;
+  --gap-sm: 14px;
+  --gap: 22px;
+  --gap-lg: 34px;
+  --gap-xl: 52px;
+
+  /* --- hand-drawn feel --- */
+  --shadow-sketch: 3px 4px 0 rgba(31, 29, 26, 0.14);
+  --shadow-sketch-lift: 5px 7px 0 rgba(31, 29, 26, 0.18);
+
+  /* --- motion --- */
+  --t-meter: 600ms;
+  --ease: cubic-bezier(0.22, 0.68, 0.28, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-meter: 1ms;
+  }
+}

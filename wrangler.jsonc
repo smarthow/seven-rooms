@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Seven Rooms — static site served by a Cloudflare Worker (assets only, no script).
+  // Deploy: npm run build && npx wrangler deploy
+  "name": "seven-rooms",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist",
+    // The site is one document with hash routing; unknown paths get the real 404.
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    { "pattern": "sevenrooms.smarthow.com", "custom_domain": true }
+  ],
+  "observability": { "enabled": true }
+}

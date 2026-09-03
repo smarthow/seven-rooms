@@ -1,0 +1,206 @@
+/* rooms/room1-attention/room.css — scoped to .room-1.
+ *
+ * The engine adds `room-1` to the slide container, so every selector here
+ * starts with `.room-1`. Nothing leaks into other rooms.
+ */
+
+.room-1 .article {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.room-1 .article__frame {
+  position: relative;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  transform: rotate(-0.35deg);
+  overflow: hidden;
+}
+
+/* the scrollable "page" — deliberately short so scrolling is quick */
+.room-1 .article__scroll {
+  height: 260px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px 18px 20px;
+  text-align: left;
+}
+
+.room-1 .article__kicker {
+  font-family: var(--font-hand);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.room-1 .article__title {
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.15;
+  margin: 6px 0 4px;
+}
+
+.room-1 .article__byline {
+  font-size: var(--size-tiny);
+  color: var(--ink-faint);
+  margin-bottom: 12px;
+}
+
+.room-1 .article__p {
+  font-size: var(--size-small);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.room-1 .article__ad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  margin: 14px 0;
+  border: 2px dashed var(--ink-faint);
+  border-radius: var(--radius-sm);
+  background: var(--paper-deep);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+.room-1 .article__end {
+  font-family: var(--font-hand);
+  font-size: 18px;
+  color: var(--ink-faint);
+  text-align: center;
+  padding-top: 6px;
+  border-top: 2px dashed var(--ink-faint);
+}
+
+/* a soft green glow while the human is genuinely reading = money flowing */
+.room-1 .article--reading .article__frame {
+  box-shadow: 0 0 0 4px var(--good-wash), var(--shadow-sketch);
+}
+
+.room-1 .article__stat--money .stat__value {
+  color: var(--good);
+  transition: color 400ms var(--ease);
+}
+
+.room-1 .article__money--dropped {
+  color: var(--danger) !important;
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
+}
+
+/* stamped across the page once a tool has read it */
+.room-1 .article__badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 12px;
+  border: var(--border) solid var(--agent);
+  border-radius: 999px;
+  background: var(--agent-wash);
+  color: var(--agent);
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: 1.3;
+  transform: rotate(4deg);
+  animation: stamp-in 320ms var(--ease) both;
+}
+
+.room-1 .article__badge[hidden] {
+  display: none;
+}
+
+@keyframes stamp-in {
+  from {
+    opacity: 0;
+    transform: rotate(4deg) scale(1.6);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(4deg) scale(1);
+  }
+}
+
+.room-1 .article--skipped .article__scroll {
+  opacity: 0.6;
+}
+
+/* the little "what the agent got" receipt */
+.room-1 .article__receipt {
+  align-self: stretch;
+  padding: 12px 14px;
+  border: var(--border) dashed var(--agent);
+  border-radius: var(--radius-sm);
+  background: var(--agent-wash);
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--size-tiny);
+  color: var(--ink-soft);
+}
+
+.room-1 .article__receiptline + .article__receiptline {
+  margin-top: 4px;
+}
+
+@media (max-width: 520px) {
+  .room-1 .article__scroll {
+    height: 220px;
+  }
+}
+
+/* ---------------------------------------------- above the fold (>=768px)
+   Inside a splitPane the article frame becomes the flexible element: it
+   takes whatever height the column has left, and only the article BODY
+   scrolls. Nothing about this room's readouts moves below the fold.
+   -------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .room-1 .split__main .article {
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 10px;
+  }
+
+  .room-1 .split__main .article__frame {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 130px;
+  }
+
+  .room-1 .split__main .article__scroll {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+    padding: 13px 16px 16px;
+  }
+
+  .room-1 .split__main .article__ad {
+    height: 44px;
+    margin: 11px 0;
+  }
+
+  .room-1 .split__main .stat {
+    padding: 8px 11px;
+  }
+
+  .room-1 .split__main .stat__value {
+    font-size: 22px;
+  }
+
+  .room-1 .split__main .article > .tiny {
+    margin-top: -2px;
+  }
+
+  .room-1 .split__side .article__receipt {
+    padding: 9px 11px;
+  }
+}

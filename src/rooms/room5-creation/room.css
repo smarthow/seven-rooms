@@ -1,0 +1,341 @@
+/* rooms/room5-creation/room.css — scoped to .room-5.
+ *
+ * The engine adds `room-5` to the slide container, so every selector here
+ * starts with `.room-5`. Nothing leaks into another room.
+ */
+
+.room-5 .canvas {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.room-5 .canvas__frame {
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  transform: rotate(0.3deg);
+  overflow: hidden;
+}
+
+/* the editor's title bar */
+.room-5 .canvas__bar {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 14px;
+  border-bottom: var(--border) solid var(--ink);
+  background: var(--paper-deep);
+}
+
+.room-5 .canvas__name {
+  font-family: var(--font-hand);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.room-5 .canvas__sub {
+  font-size: var(--size-tiny);
+  color: var(--ink-faint);
+}
+
+/* ------------------------------------------------------------- the grid */
+
+/* the box the grid has to fit inside; on desktop it is height-bound */
+.room-5 .canvas__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 12px;
+}
+
+.room-5 .canvas__grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  gap: 3px;
+  width: 100%;
+}
+
+.room-5 .tile {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  padding: 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  background: var(--paper-card);
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    background-color 160ms var(--ease),
+    transform 120ms var(--ease);
+}
+
+.room-5 .tile:hover {
+  transform: translateY(-2px);
+}
+
+.room-5 .tile:active {
+  transform: translateY(0) scale(0.96);
+}
+
+.room-5 .tile:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* the five colours of the palette */
+.room-5 .tile--paper {
+  background: var(--paper-card);
+}
+.room-5 .tile--coral {
+  background: var(--human);
+}
+.room-5 .tile--orange {
+  background: var(--accent);
+}
+.room-5 .tile--teal {
+  background: var(--agent);
+}
+.room-5 .tile--ink {
+  background: var(--ink);
+}
+
+/* ------------------------------------------------------- who made what */
+
+/* a small corner flag: coral = the human, teal = the agent */
+.room-5 .tile__mark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--paper-card);
+  border-bottom: 2px solid var(--paper-card);
+  border-bottom-right-radius: 10px;
+  background: var(--ink-faint);
+  pointer-events: none;
+}
+
+.room-5 .tile__mark[hidden] {
+  display: none;
+}
+
+.room-5 .tile--you .tile__mark {
+  background: var(--human);
+}
+
+.room-5 .tile--agent .tile__mark {
+  background: var(--agent);
+}
+
+/* both of you touched it: striped mark and a striped wash over the tile */
+.room-5 .tile--both .tile__mark {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--human) 0 4px,
+    var(--agent) 4px 8px
+  );
+}
+
+.room-5 .tile--both {
+  border-color: var(--agent);
+  box-shadow: inset 0 0 0 2px var(--human);
+}
+
+.room-5 .tile--both::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 253, 247, 0.55) 0 5px,
+    rgba(255, 253, 247, 0) 5px 10px
+  );
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------- the collision */
+
+.room-5 .tile--flash {
+  animation: room5-clash 620ms var(--ease) 2;
+  z-index: 1;
+}
+
+@keyframes room5-clash {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent);
+    transform: scale(1);
+  }
+  35% {
+    box-shadow: 0 0 0 6px var(--accent);
+    transform: scale(1.14) rotate(-3deg);
+  }
+  100% {
+    box-shadow: 0 0 0 0 var(--accent);
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-5 .tile--flash {
+    animation: none;
+    outline: 3px solid var(--accent);
+  }
+}
+
+/* --------------------------------------------------------------- legend */
+
+.room-5 .canvas__keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  padding: 0 14px 12px;
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--ink-soft);
+}
+
+.room-5 .canvas__keyyou {
+  color: var(--human);
+}
+
+.room-5 .canvas__keyagent {
+  color: var(--agent);
+}
+
+.room-5 .canvas__keyboth {
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------- the counters */
+
+.room-5 .canvas__stat--clash .stat__value {
+  transition: color 300ms var(--ease);
+}
+
+.room-5 .canvas__stat--hot {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.room-5 .canvas__stat--hot .stat__value {
+  color: var(--accent);
+}
+
+@media (max-width: 420px) {
+  .room-5 .canvas__grid {
+    gap: 2px;
+    padding: 8px;
+  }
+
+  .room-5 .tile__mark {
+    width: 10px;
+    height: 10px;
+    border-bottom-right-radius: 8px;
+  }
+
+  .room-5 .canvas__keys {
+    font-size: 16px;
+  }
+}
+
+/* ---------------------------------------------- above the fold (>=768px)
+   Inside a splitPane the canvas is sized by the HEIGHT the column has
+   left, never by its own content. The stage becomes the flexible element
+   and a size container; the grid fits inside it at 6/4, so the tiles
+   shrink and the page never grows. The counters sit directly underneath
+   and stay visible for the whole fifteen-second ghost run.
+   -------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .room-5 .split__main .canvas {
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 8px;
+  }
+
+  .room-5 .split__main .canvas__frame {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .room-5 .split__main .canvas__bar {
+    flex: 0 0 auto;
+    padding: 5px 12px;
+  }
+
+  .room-5 .split__main .canvas__name {
+    font-size: 19px;
+  }
+
+  .room-5 .split__main .canvas__stage {
+    flex: 1 1 auto;
+    min-height: 60px;
+    padding: 9px;
+    /* a size container, so the grid can be measured against the height
+       this pane actually left over */
+    container-type: size;
+  }
+
+  .room-5 .split__main .canvas__grid {
+    aspect-ratio: 8 / 7;
+    width: min(100%, calc(100cqh * 8 / 7));
+    height: auto;
+    max-height: 100%;
+    gap: 3px;
+  }
+
+  .room-5 .split__main .tile {
+    aspect-ratio: auto;
+    width: auto;
+    height: auto;
+    min-height: 0;
+  }
+
+  .room-5 .split__main .canvas__keys {
+    flex: 0 0 auto;
+    gap: 2px 12px;
+    padding: 0 12px 7px;
+    font-size: 16px;
+  }
+
+  .room-5 .split__side .toollist {
+    padding: 8px 10px;
+    gap: 3px;
+  }
+
+  .room-5 .split__side .toollist__item {
+    padding-top: 3px;
+  }
+
+  .room-5 .split__side .char svg {
+    width: clamp(40px, 4.4vw, 50px);
+  }
+
+  .room-5 .split__main .statrow {
+    flex: 0 0 auto;
+    gap: 6px;
+  }
+
+  .room-5 .split__main .stat {
+    padding: 6px 8px;
+  }
+
+  .room-5 .split__main .stat__value {
+    font-size: 20px;
+  }
+
+  .room-5 .split__main .stat__label {
+    font-size: 11px;
+  }
+}

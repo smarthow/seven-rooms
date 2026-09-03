@@ -1,0 +1,496 @@
+/* rooms/room3-lockin/room.css — scoped to .room-3.
+ *
+ * The engine adds `room-3` to the slide container, so every selector here
+ * starts with `.room-3`. Nothing leaks into other rooms.
+ */
+
+.room-3 .dash {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+/* -------------------------------------------------------- the fake app */
+
+.room-3 .dash__frame {
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  box-shadow: var(--shadow-sketch);
+  transform: rotate(0.3deg);
+  overflow: hidden;
+  text-align: left;
+}
+
+.room-3 .dash__bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-xs);
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  background: var(--paper-deep);
+  border-bottom: var(--border) solid var(--ink);
+}
+
+.room-3 .dash__logo {
+  font-weight: 900;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+.room-3 .dash__plan {
+  font-family: var(--font-hand);
+  font-size: 17px;
+  color: var(--ink-faint);
+}
+
+.room-3 .dash__tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px dashed var(--ink-faint);
+  background: var(--paper-card);
+}
+
+.room-3 .dash__tab {
+  flex: 1 1 auto;
+  padding: 9px 8px;
+  border: 0;
+  border-right: 2px dashed var(--ink-faint);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--size-tiny);
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.room-3 .dash__tab:last-child {
+  border-right: 0;
+}
+
+.room-3 .dash__tab:hover {
+  background: var(--accent-wash);
+}
+
+.room-3 .dash__tab--on {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.room-3 .dash__body {
+  padding: 12px 14px;
+  min-height: 168px;
+}
+
+.room-3 .dash__panel[hidden] {
+  display: none;
+}
+
+.room-3 .dash__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-xs);
+  flex-wrap: wrap;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--ink-faint);
+}
+
+.room-3 .dash__row:last-child {
+  border-bottom: 0;
+}
+
+.room-3 .dash__rowname {
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.room-3 .dash__rowname--file {
+  font-family: var(--font-mono);
+  font-size: var(--size-tiny);
+  font-weight: 400;
+}
+
+.room-3 .dash__rowmeta {
+  font-size: var(--size-tiny);
+  color: var(--ink-faint);
+  margin-left: auto;
+}
+
+.room-3 .dash__tag {
+  padding: 1px 8px;
+  border: 2px solid var(--ink-faint);
+  border-radius: 999px;
+  font-family: var(--font-hand);
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--ink-soft);
+}
+
+.room-3 .dash__note {
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--ink-faint);
+}
+
+.room-3 .dash__note:last-child {
+  border-bottom: 0;
+}
+
+.room-3 .dash__notehead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-xs);
+}
+
+.room-3 .dash__notebody {
+  font-size: var(--size-tiny);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+
+/* --------------------------------------------------- the refused button */
+
+.room-3 .dash__exportrow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  flex-wrap: wrap;
+  padding: 11px 14px;
+  border-top: var(--border) solid var(--ink);
+  background: var(--paper-deep);
+}
+
+.room-3 .dash__export {
+  padding: 7px 14px;
+  border: 2.5px solid var(--ink-faint);
+  border-radius: var(--radius-sm);
+  background: #e4ded2;
+  font-family: var(--font-body);
+  font-size: var(--size-tiny);
+  font-weight: 900;
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}
+
+.room-3 .dash__tooltip {
+  font-family: var(--font-hand);
+  font-size: 17px;
+  color: var(--ink-faint);
+}
+
+.room-3 .dash__exportnote {
+  font-family: var(--font-hand);
+  font-size: 18px;
+  color: var(--agent);
+  border-bottom: 2px solid var(--agent);
+}
+
+.room-3 .dash__exportnote[hidden] {
+  display: none;
+}
+
+/* ------------------------------------------------------ switching cost */
+
+/* meter + breakdown, and (after the export) the bundle card beside it */
+.room-3 .dash__costwrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.room-3 .dash__costbox {
+  padding: 12px 14px 10px;
+  border: var(--border) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--danger-wash);
+  box-shadow: var(--shadow-sketch);
+  transform: rotate(-0.4deg);
+  text-align: left;
+  transition: background 600ms var(--ease);
+}
+
+.room-3 .dash--exported .dash__costbox {
+  background: var(--good-wash);
+}
+
+.room-3 .dash__breakdown {
+  list-style: none;
+  margin: 10px 0 6px;
+  padding: 0;
+}
+
+.room-3 .dash__costline {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap-xs);
+  font-size: var(--size-tiny);
+  color: var(--ink-soft);
+  padding: 3px 0;
+  transition: opacity 300ms var(--ease);
+}
+
+.room-3 .dash__costhours {
+  font-family: var(--font-hand);
+  font-size: 17px;
+  color: var(--danger);
+}
+
+.room-3 .dash__costline--done {
+  opacity: 0.5;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.room-3 .dash__costline--done .dash__costhours {
+  color: var(--good);
+}
+
+/* -------------------------------------------------- the portable bundle */
+
+.room-3 .dash__bundle {
+  padding: 12px 14px;
+  border: var(--border) dashed var(--agent);
+  border-radius: var(--radius);
+  background: var(--agent-wash);
+  text-align: left;
+  animation: bundle-in 340ms var(--ease) both;
+}
+
+.room-3 .dash__bundle[hidden] {
+  display: none;
+}
+
+@keyframes bundle-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) rotate(0.8deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.room-3 .dash__bundlehead {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+}
+
+.room-3 .dash__bundleicon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 2.5px solid var(--agent);
+  border-radius: var(--radius-sm);
+  background: var(--paper-card);
+  color: var(--agent);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.room-3 .dash__bundletitle {
+  font-weight: 900;
+  font-size: var(--size-small);
+  color: var(--agent);
+}
+
+.room-3 .dash__bundlebody {
+  margin-top: 8px;
+}
+
+.room-3 .dash__bundlefile {
+  font-family: var(--font-mono);
+  font-size: var(--size-tiny);
+  font-weight: 700;
+  padding: 5px 8px;
+  border: 2px solid var(--agent);
+  border-radius: var(--radius-sm);
+  background: var(--paper-card);
+  display: inline-block;
+  margin-bottom: 7px;
+}
+
+.room-3 .dash__bundleline {
+  font-size: var(--size-tiny);
+  color: var(--ink-soft);
+  padding: 2px 0;
+}
+
+.room-3 .dash__bundlefoot {
+  font-family: var(--font-hand);
+  font-size: 16px;
+  color: var(--ink-faint);
+  margin-top: 6px;
+}
+
+@media (max-width: 520px) {
+  .room-3 .dash__tab {
+    font-size: 11px;
+    padding: 8px 4px;
+  }
+
+  .room-3 .dash__rowmeta {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .room-3 .dash__body {
+    min-height: 0;
+  }
+}
+
+/* ---------------------------------------------- above the fold (>=768px)
+   Inside a splitPane the dashboard frame is the flexible element: it takes
+   whatever height the column has left and only the TAB BODY scrolls. The
+   switching-cost meter, its four-line breakdown, the grey Export button and
+   the portable-bundle card all stay on screen — the bundle sits beside the
+   meter instead of under it, which is where the height comes from.
+   -------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  /* the frame and the cost box are drawn very slightly askew, so give the
+     column a couple of pixels of slack — otherwise the rotation alone counts
+     as overflow and the acceptance test is right to complain */
+  .room-3 .split__main {
+    padding-bottom: 4px;
+  }
+
+  .room-3 .split__main .dash {
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 9px;
+  }
+
+  .room-3 .split__main .dash__frame {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 132px;
+  }
+
+  .room-3 .split__main .dash__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    padding: 9px 13px;
+  }
+
+  .room-3 .split__main .dash__bar {
+    padding: 7px 13px;
+  }
+
+  .room-3 .split__main .dash__logo {
+    font-size: 16px;
+  }
+
+  .room-3 .split__main .dash__tab {
+    padding: 7px 6px;
+  }
+
+  .room-3 .split__main .dash__exportrow {
+    padding: 8px 13px;
+  }
+
+  /* the bundle card lands NEXT TO the cost box, not under it */
+  .room-3 .split__main .dash__costwrap {
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .room-3 .split__main .dash__costbox,
+  .room-3 .split__main .dash__bundle {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 9px 12px 7px;
+  }
+
+  .room-3 .split__main .dash__breakdown {
+    margin: 6px 0 3px;
+  }
+
+  .room-3 .split__main .dash__costline {
+    padding: 1px 0;
+    gap: 8px;
+  }
+
+  .room-3 .split__main .dash__costhours {
+    font-size: 16px;
+  }
+
+  .room-3 .split__main .dash__costbox .tiny {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  .room-3 .split__main .dash__bundlebody {
+    margin-top: 5px;
+  }
+
+  .room-3 .split__main .dash__bundlefile {
+    margin-bottom: 5px;
+    padding: 3px 7px;
+  }
+
+  .room-3 .split__main .dash__bundleline {
+    padding: 1px 0;
+    line-height: 1.35;
+  }
+
+  .room-3 .split__main .dash__bundlefoot {
+    font-size: 15px;
+    margin-top: 4px;
+  }
+
+  /* room 3 hands over two long tool descriptions, so the side column has to
+     give the height back somewhere: a smaller agent and tighter cards. */
+  .room-3 .split__side .char svg {
+    width: clamp(40px, 4.4vw, 50px);
+  }
+
+  .room-3 .split__side .char__label {
+    font-size: 15px;
+  }
+
+  .room-3 .split__side .tiny {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  .room-3 .split__side .prompthint {
+    padding: 8px 11px;
+  }
+
+  .room-3 .split__side .toollist {
+    padding: 8px 11px;
+    gap: 5px;
+  }
+
+  .room-3 .split__side .toollist__head {
+    font-size: 17px;
+  }
+
+  .room-3 .split__side .toollist__desc {
+    line-height: 1.3;
+  }
+
+  .room-3 .split__main .dash__bundleicon {
+    width: 22px;
+    height: 22px;
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-3 .dash__bundle {
+    animation: none !important;
+  }
+}
